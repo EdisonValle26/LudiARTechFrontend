@@ -1,0 +1,100 @@
+import 'package:LudiArtech/pages/activityCenter/widgets/activity_card.dart';
+import 'package:flutter/material.dart';
+
+
+class WordForm extends StatelessWidget {
+  final double scale;
+  const WordForm({super.key, required this.scale});
+
+  @override
+  Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final w = size.width;
+    final h = size.height;
+
+    final sectionSpacing = h * 0.05 * scale;
+
+    return Container(
+      width: w,
+      padding: EdgeInsets.fromLTRB(
+        w * 0.09 * scale,
+        h * 0,
+        w * 0.09 * scale,
+        h * 0.02 * scale,
+      ),
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.7),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text(
+            "🏆 Desafío Word del día",
+            style: TextStyle(
+              fontSize: w * 0.060 * scale,
+              fontWeight: FontWeight.w800,
+              color: Colors.black,
+            ),
+          ),
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  ActivityCardWidget(
+                    scale: scale,
+                    leftSquareColor: Colors.greenAccent.shade100,
+                    title: "Ejemplo (Kahoot sobre tal tema)",
+                    subtitle: "Resuelve la actividad en menos de 5 minutos",
+                    leftValue: "85%",
+                    leftCaption: "Completado",
+                    rightValue: "8/10",
+                    rightCaption: "Actividades",
+                    leftButtonIcon: Icons.assignment,
+                    leftButtonText: "Continuar",
+                    onLeftTap: () {},
+                    rightButtonIcon: Icons.restart_alt,
+                    rightButtonText: "Reiniciar",
+                    onRightTap: () {},
+                  ),
+                  ActivityCardWidget(
+                    scale: scale,
+                    leftSquareColor: Colors.purpleAccent.shade100,
+                    title: "Ejemplo (Rompecabeza sobre tal tema)",
+                    subtitle: "Resuelve la actividad en menos de 5 minutos",
+                    leftValue: "100%",
+                    leftCaption: "Completado",
+                    rightValue: "3:45",
+                    rightCaption: "Mejor Tiempo",
+                    leftButtonIcon: Icons.assessment,
+                    leftButtonText: "Ver resultados",
+                    onLeftTap: () {},
+                    rightButtonIcon: Icons.restore,
+                    rightButtonText: "Repetir",
+                    onRightTap: () {},
+                  ),
+                  ActivityCardWidget(
+                    scale: scale,
+                    leftSquareColor: Colors.orangeAccent.shade100,
+                    title: "Ejemplo (Quiz sobre tal tema)",
+                    subtitle: "Resuelve la actividad en menos de 5 minutos",
+                    leftValue: "50%",
+                    leftCaption: "Completado",
+                    rightValue: "5/10",
+                    rightCaption: "Calificaciones",
+                    leftButtonIcon: Icons.assessment,
+                    leftButtonText: "Ver resultados",
+                    onLeftTap: () {},
+                    rightButtonIcon: Icons.refresh,
+                    rightButtonText: "Repetir",
+                    onRightTap: () {},
+                  ),
+                  SizedBox(height: sectionSpacing),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

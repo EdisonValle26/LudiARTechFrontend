@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "320123981963",
+    "project_id": "tindercl-7b90e",
+    "storage_bucket": "tindercl-7b90e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:320123981963:android:aa3e8d72f19320074a848e",
+        "android_client_info": {
+          "package_name": "com.example.ludi_ar_tech"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBbyC8hgEYGe44t9-msjQXrK0MTgGtqTq4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
