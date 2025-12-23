@@ -1,3 +1,7 @@
+import 'package:LudiArtech/routes/app_routes.dart';
+import 'package:LudiArtech/services/api_service.dart';
+import 'package:LudiArtech/services/auth_service.dart';
+import 'package:LudiArtech/utils/api_constants.dart';
 import 'package:LudiArtech/widgets/banner_notification.dart';
 import 'package:flutter/material.dart';
 
@@ -17,6 +21,11 @@ class _RecoverPasswordFormState extends State<RecoverPasswordForm> {
   final TextEditingController newPassword = TextEditingController();
   final TextEditingController confirmPassword = TextEditingController();
 
+  final AuthService authService =
+      AuthService(ApiService(ApiConstants.baseUrl));
+
+  bool _loading = false;
+
   bool showNew = false;
   bool showConfirm = false;
 
@@ -34,7 +43,7 @@ class _RecoverPasswordFormState extends State<RecoverPasswordForm> {
 
   bool get isFormValid {
     final codeFilled =
-        codeControllers.every((c) => c.text.isNotEmpty && c.text.length == 1);
+        codeControllers.every((c) => c.text.length == 1);
 
     return codeFilled &&
         hasMinLength &&
@@ -43,7 +52,10 @@ class _RecoverPasswordFormState extends State<RecoverPasswordForm> {
         confirmPassword.text == newPassword.text;
   }
 
-  Widget codeBox(int index, double w, double h) {
+  String get otpCode =>
+      codeControllers.map((c) => c.text).join();
+
+  Widget codeBox(int index, double w) {
     return SizedBox(
       width: 60 * w,
       height: 60 * w,
@@ -78,7 +90,8 @@ class _RecoverPasswordFormState extends State<RecoverPasswordForm> {
   Widget bullet(String text, bool valid) {
     return Row(
       children: [
-        Icon(Icons.circle, size: 10, color: valid ? Colors.green : Colors.grey),
+        Icon(Icons.circle,
+            size: 10, color: valid ? Colors.green : Colors.grey),
         const SizedBox(width: 8),
         Text(
           text,
@@ -120,12 +133,14 @@ class _RecoverPasswordFormState extends State<RecoverPasswordForm> {
             hintText: placeholder,
             suffixIcon: InkWell(
               onTap: toggle,
-              child: Icon(obscure ? Icons.visibility_off : Icons.visibility),
+              child:
+                  Icon(obscure ? Icons.visibility_off : Icons.visibility),
             ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(14),
             ),
-            errorStyle: const TextStyle(color: Colors.red, fontSize: 13),
+            errorStyle:
+                const TextStyle(color: Colors.red, fontSize: 13),
           ),
         ),
       ],
@@ -134,9 +149,8 @@ class _RecoverPasswordFormState extends State<RecoverPasswordForm> {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    final w = size.width / 390;
-    final h = size.height / 844;
+    final w = MediaQuery.of(context).size.width / 390;
+    final h = MediaQuery.of(context).size.height / 844;
 
     return SingleChildScrollView(
       padding: EdgeInsets.symmetric(horizontal: 15 * w, vertical: 20 * h),
@@ -146,19 +160,7 @@ class _RecoverPasswordFormState extends State<RecoverPasswordForm> {
 
           Text(
             "Ingresa el código de verificación",
-            style: TextStyle(
-              fontSize: 22 * w,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          SizedBox(height: 8 * h),
-          Text(
-            "Hemos enviado un código a tu correo.",
-            style: TextStyle(
-              fontSize: 14 * w,
-              color: Colors.black54,
-            ),
-            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 22 * w, fontWeight: FontWeight.bold),
           ),
 
           SizedBox(height: 20 * h),
@@ -169,25 +171,23 @@ class _RecoverPasswordFormState extends State<RecoverPasswordForm> {
               4,
               (i) => Padding(
                 padding: EdgeInsets.symmetric(horizontal: 8 * w),
-                child: codeBox(i, w, h),
+                child: codeBox(i, w),
               ),
             ),
           ),
 
-          SizedBox(height: 20 * h),
+          SizedBox(height: 25 * h),
 
           Container(
-            width: double.infinity,
             padding: EdgeInsets.all(20 * w),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(20 * w),
               boxShadow: const [
                 BoxShadow(
-                  color: Colors.black12,
-                  blurRadius: 10,
-                  offset: Offset(0, 4),
-                )
+                    color: Colors.black12,
+                    blurRadius: 10,
+                    offset: Offset(0, 4))
               ],
             ),
             child: Column(
@@ -219,8 +219,10 @@ class _RecoverPasswordFormState extends State<RecoverPasswordForm> {
                   obscure: !showNew,
                   toggle: () => setState(() => showNew = !showNew),
                   onChanged: validatePassword,
-                  validator: (value) {
-                    if (!hasMinLength || !hasUppercase || !hasNumber) {
+                  validator: (_) {
+                    if (!hasMinLength ||
+                        !hasUppercase ||
+                        !hasNumber) {
                       return "La contraseña no cumple los requisitos";
                     }
                     return null;
@@ -242,9 +244,10 @@ class _RecoverPasswordFormState extends State<RecoverPasswordForm> {
                   placeholder: "Repite tu nueva contraseña",
                   controller: confirmPassword,
                   obscure: !showConfirm,
-                  toggle: () => setState(() => showConfirm = !showConfirm),
-                  validator: (value) {
-                    if (value != newPassword.text) {
+                  toggle: () =>
+                      setState(() => showConfirm = !showConfirm),
+                  validator: (v) {
+                    if (v != newPassword.text) {
                       return "Las contraseñas no coinciden";
                     }
                     return null;
@@ -256,30 +259,63 @@ class _RecoverPasswordFormState extends State<RecoverPasswordForm> {
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: isFormValid
-                        ? () {
-                            BannerNotification.show(
-                              context,
-                              message: "Contraseña restablecida correctamente",
-                            );
+                    onPressed: isFormValid && !_loading
+                        ? () async {
+                            setState(() => _loading = true);
+
+                            try {
+                              await authService.resetPassword(
+                                otp: otpCode,
+                                newPassword: newPassword.text.trim(),
+                              );
+
+                              BannerNotification.show(
+                                context,
+                                message:
+                                    "Contraseña restablecida correctamente",
+                              );
+
+                              for (var c in codeControllers) {
+                                c.clear();
+                              }
+                              newPassword.clear();
+                              confirmPassword.clear();
+
+                              Navigator.pushNamed(
+                                context,
+                                AppRoutes.login,
+                              );
+                            } catch (e) {
+                              BannerNotification.show(
+                                context,
+                                message: e
+                                    .toString()
+                                    .replaceAll('Exception: ', ''),
+                                isSuccess: false,
+                              );
+                            } finally {
+                              setState(() => _loading = false);
+                            }
                           }
                         : null,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: isFormValid
                           ? Colors.blueAccent
-                          : Colors.grey.shade400,
-                      padding: EdgeInsets.symmetric(vertical: 16 * h),
+                          : Colors.grey,
+                      padding:
+                          EdgeInsets.symmetric(vertical: 16 * h),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(14 * w),
                       ),
                     ),
                     child: Text(
-                      "Restablecer contraseña",
+                      _loading
+                          ? "Procesando..."
+                          : "Restablecer contraseña",
                       style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 17 * w,
-                        fontWeight: FontWeight.bold,
-                      ),
+                          color: Colors.white,
+                          fontSize: 17 * w,
+                          fontWeight: FontWeight.bold),
                     ),
                   ),
                 ),

@@ -1,4 +1,7 @@
 import 'package:LudiArtech/routes/app_routes.dart';
+import 'package:LudiArtech/services/api_service.dart';
+import 'package:LudiArtech/services/auth_service.dart';
+import 'package:LudiArtech/utils/api_constants.dart';
 import 'package:LudiArtech/widgets/banner_notification.dart';
 import 'package:flutter/material.dart';
 
@@ -11,13 +14,25 @@ class ForgetPasswordForm extends StatefulWidget {
 }
 
 class _ForgetPasswordFormState extends State<ForgetPasswordForm> {
-  final emailCtrl = TextEditingController();
   bool isValidEmail = false;
+  bool _loading = false;
 
   bool validateEmail(String value) {
     final regex = RegExp(r'^[\w\.-]+@[\w\.-]+\.\w+$');
     return regex.hasMatch(value);
   }
+
+
+  final emailController = TextEditingController();
+
+  final AuthService authService = AuthService(ApiService(ApiConstants.baseUrl));
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    super.dispose();
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -98,7 +113,7 @@ class _ForgetPasswordFormState extends State<ForgetPasswordForm> {
                 SizedBox(height: 10 * h),
 
                 TextField(
-                  controller: emailCtrl,
+                  controller: emailController,
                   keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
                     hintText: "tu.correo@ejemplo.com",
@@ -125,22 +140,49 @@ class _ForgetPasswordFormState extends State<ForgetPasswordForm> {
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton.icon(
-                    onPressed: isValidEmail
-                        ? () {
-                            BannerNotification.show(
-                              context,
-                              message: "Te enviamos un código de recuperación a tu correo",
-                            );
-                            Navigator.pushNamed(context, AppRoutes.recoverPassword);
+                    onPressed: (!_loading && isValidEmail)
+                        ? () async {
+                            setState(() => _loading = true);
+
+                            try {
+                              await authService.requestPassword(
+                                email: emailController.text.trim(),
+                              );
+
+                              BannerNotification.show(
+                                context,
+                                message:
+                                    "Te enviamos un código de recuperación a tu correo",
+                              );
+
+                              Navigator.pushNamed(
+                                context,
+                                AppRoutes.recoverPassword,
+                              );
+                            } catch (e) {
+                              BannerNotification.show(
+                                context,
+                                message: e.toString(),
+                                isSuccess: false,
+                              );
+                            } finally {
+                              setState(() => _loading = false);
+                            }
                           }
                         : null,
-                    icon: const Icon(Icons.send),
+                    icon: _loading
+                        ? const SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              color: Colors.white,
+                            ),
+                          )
+                        : const Icon(Icons.send),
                     label: Text(
-                      "Enviar código",
-                      style: TextStyle(
-                        fontSize: 15 * w,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      _loading ? "Enviando..." : "Enviar código",
+                      style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
                     style: ElevatedButton.styleFrom(
                       padding: EdgeInsets.symmetric(vertical: 18 * h),
@@ -155,61 +197,16 @@ class _ForgetPasswordFormState extends State<ForgetPasswordForm> {
                   ),
                 ),
 
-                SizedBox(height: 40 * h),
-
-                Container(
-                  padding: EdgeInsets.all(14 * w),
-                  decoration: BoxDecoration(
-                    color: Colors.pink.shade50,
-                    borderRadius: BorderRadius.circular(12 * w),
-                  ),
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.emoji_objects_outlined,
-                        color: Colors.amber,
-                        size: 40 * w,
-                      ),
-                      SizedBox(width: 10 * w),
-                      Expanded(
-                        child: RichText(
-                          text: TextSpan(
-                            style: TextStyle(
-                              color: Colors.black87,
-                              fontSize: 14 * w,
-                            ),
-                            children: [
-                              TextSpan(
-                                text: "Tip: ",
-                                style: TextStyle(
-                                  color: Colors.purple,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 15 * w,
-                                ),
-                              ),
-                              const TextSpan(
-                                text:
-                                    "Revisa también tu carpeta de spam si no ves el correo en unos minutos.",
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-
                 SizedBox(height: 35 * h),
 
                 GestureDetector(
                   onTap: () {
                     Navigator.pushNamed(context, AppRoutes.login);
                   },
-                  child: Text(
+                  child: const Text(
                     "¿Recordaste tu contraseña?",
                     style: TextStyle(
                       color: Colors.black45,
-                      fontSize: 14 * w,
                       fontWeight: FontWeight.bold,
                       decoration: TextDecoration.underline,
                     ),
@@ -218,8 +215,6 @@ class _ForgetPasswordFormState extends State<ForgetPasswordForm> {
               ],
             ),
           ),
-
-          SizedBox(height: 20 * h),
         ],
       ),
     );

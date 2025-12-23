@@ -54,4 +54,30 @@ class AuthService {
       },
     );
   }
+
+  //REQUEST PASSWORD RESET
+  Future<void> requestPassword({
+    required String email,
+  }) async {
+    await api.post(
+      ApiConstants.requestPassword,
+      body: {
+        "email": email,
+      },
+    );
+  }
+
+  //PASSWORD RESET
+  Future<void> resetPassword({
+    required String otp,
+    required String newPassword,
+  }) async {
+    await api.post(
+      ApiConstants.resetPassword,
+      body: {
+        "otp": otp,
+        "newPassword": newPassword,
+      },
+    );
+  }
 }

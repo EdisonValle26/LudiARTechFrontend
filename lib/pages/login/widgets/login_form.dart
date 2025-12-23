@@ -164,6 +164,10 @@ class _LoginFormState extends State<LoginForm> {
                               );
 
                               await TokenStorage.saveToken(authResponse.token);
+                              await TokenStorage.saveUsername(
+                                  authResponse.user.username);
+                              await TokenStorage.saveFullname(
+                                  authResponse.user.fullname);
 
                               Future.delayed(const Duration(milliseconds: 600),
                                   () {

@@ -8,8 +8,8 @@ class ProfileAvatar extends StatelessWidget {
   const ProfileAvatar({
     super.key,
     required this.radius,
-    this.name = "Maria",
-    this.lastName = "Gomez",
+    required this.name,
+    required this.lastName,
   });
 
   String getInitials() {
@@ -20,21 +20,23 @@ class ProfileAvatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        CircleAvatar(
-          radius: radius,
-          backgroundColor: Colors.deepPurple.shade300,
-          child: Text(
-            getInitials(),
-            style: TextStyle(
-              fontSize: radius * 0.6,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
+    return Center(
+      child: Stack(
+        children: [
+          CircleAvatar(
+            radius: radius,
+            backgroundColor: Colors.amberAccent,
+            child: Text(
+              getInitials(),
+              style: TextStyle(
+                fontSize: radius * 0.6,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
