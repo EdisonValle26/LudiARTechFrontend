@@ -47,6 +47,41 @@ class ApiService {
     return _handleResponse(response);
   }
 
+  /// GET CON TOKEN
+  Future<Map<String, dynamic>> getAuth(
+    String endpoint, {
+    required String token,
+  }) async {
+    final url = Uri.parse('$baseUrl$endpoint');
+
+    final response = await http.get(url, headers: {
+      "Content-Type": "application/json",
+      "Authorization": token,
+    });
+
+    return _handleResponse(response);
+  }
+
+  /// PUT CON TOKEN
+  Future<Map<String, dynamic>> putAuth(
+    String endpoint, {
+    required String token,
+    Map<String, dynamic>? body,
+  }) async {
+    final url = Uri.parse('$baseUrl$endpoint');
+
+    final response = await http.put(
+      url,
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": token,
+      },
+      body: jsonEncode(body),
+    );
+
+    return _handleResponse(response);
+  }
+
   ///MANEJO CENTRALIZADO DE RESPUESTAS
   Map<String, dynamic> _handleResponse(http.Response response) {
     final decoded = jsonDecode(response.body);

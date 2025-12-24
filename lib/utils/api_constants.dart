@@ -10,4 +10,6 @@ class ApiConstants {
 
   // Users
   static const String userCreate = "/users";
+  static const String userGet = "/users/me";
+  static const String userUpdate = "/users/update";
 }
