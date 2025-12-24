@@ -1,6 +1,7 @@
 import 'package:LudiArtech/pages/activityCenter/activity_center_screen.dart';
 import 'package:LudiArtech/pages/configuration/configuration_screen.dart';
 import 'package:LudiArtech/pages/forgetPassword/forget_password_screen.dart';
+import 'package:LudiArtech/pages/games/sliding_puzzle/sliding_puzzle_screen.dart';
 import 'package:LudiArtech/pages/home/home_screen.dart';
 import 'package:LudiArtech/pages/learningPaths/learning_paths_screen.dart';
 import 'package:LudiArtech/pages/onboarding/onboarding_screen.dart';
@@ -40,6 +41,7 @@ class AppRoutes {
   static const String privacyPolicy = '/privacyPolicy';
   static const String forgetPassword = '/forgetPassword';
   static const String recoverPassword = '/recoverPassword';
+  static const String slidingPuzzle = '/slidingPuzzle';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -81,6 +83,8 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => const ForgetPasswordFormScreen());
       case recoverPassword:
         return MaterialPageRoute(builder: (_) => const RecoverPasswordScreen());
+      case slidingPuzzle:
+        return MaterialPageRoute(builder: (_) => const SlidingPuzzleScreen());
       default:
         return MaterialPageRoute(
           builder: (_) => const Scaffold(
