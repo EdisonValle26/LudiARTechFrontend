@@ -4,6 +4,8 @@ class TrueFalseQuestionCard extends StatelessWidget {
   final int index;
   final Map<String, dynamic> question;
   final String? selectedValue;
+  final bool reviewMode;
+  final double score;
   final Function(String, double) onAnswerSelected;
 
   const TrueFalseQuestionCard({
@@ -11,6 +13,8 @@ class TrueFalseQuestionCard extends StatelessWidget {
     required this.index,
     required this.question,
     required this.selectedValue,
+    required this.reviewMode,
+    required this.score,
     required this.onAnswerSelected,
   });
 
@@ -22,14 +26,27 @@ class TrueFalseQuestionCard extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        /// QUESTION
-        Text(
-          question["question"],
-          style: const TextStyle(fontWeight: FontWeight.bold),
+        /// HEADER
+        Row(
+          children: [
+            Expanded(
+              child: Text(
+                question["question"],
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
+            ),
+            if (reviewMode)
+              Text(
+                "P: ${score.toStringAsFixed(2)} / 1.00",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: score == 1.0 ? Colors.green : Colors.red,
+                ),
+              ),
+          ],
         ),
         const SizedBox(height: 12),
 
-        /// INSTRUCTION
         Container(
           width: double.infinity,
           padding: const EdgeInsets.all(12),
@@ -60,36 +77,61 @@ class TrueFalseQuestionCard extends StatelessWidget {
         Row(
           children: List.generate(2, (i) {
             final key = keys[i];
-            final isSelected = selectedValue == key;
+            final bool isSelected = selectedValue == key;
+            final bool isCorrect = key == correct;
+
+            Color borderColor = Colors.grey.shade300;
+            Color bgColor = Colors.white;
+            IconData? icon;
+            Color? iconColor;
+
+            if (reviewMode && isSelected) {
+              if (isCorrect) {
+                borderColor = Colors.green;
+                bgColor = Colors.green.withOpacity(0.15);
+                icon = Icons.check_circle;
+                iconColor = Colors.green;
+              } else {
+                borderColor = Colors.red;
+                bgColor = Colors.red.withOpacity(0.15);
+                icon = Icons.cancel;
+                iconColor = Colors.red;
+              }
+            } else if (isSelected) {
+              borderColor = Colors.deepPurple;
+              bgColor = Colors.deepPurple.withOpacity(0.15);
+            }
 
             return Expanded(
               child: GestureDetector(
-                onTap: () {
-                  final score = key == correct ? 1.0 : 0.0;
-                  onAnswerSelected(key, score);
-                },
+                onTap: reviewMode
+                    ? null
+                    : () {
+                        final s = key == correct ? 1.0 : 0.0;
+                        onAnswerSelected(key, s);
+                      },
                 child: Container(
                   margin: EdgeInsets.only(right: i == 0 ? 10 : 0),
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   decoration: BoxDecoration(
-                    color: isSelected
-                        ? Colors.deepPurple.withOpacity(0.15)
-                        : Colors.white,
+                    color: bgColor,
                     borderRadius: BorderRadius.circular(12),
-                    border: Border.all(
-                      color:
-                          isSelected ? Colors.deepPurple : Colors.grey.shade300,
-                      width: 2,
-                    ),
+                    border: Border.all(color: borderColor, width: 2),
                   ),
-                  child: Center(
-                    child: Text(
-                      question["options"][i],
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        color: isSelected ? Colors.deepPurple : Colors.black,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      if (icon != null)
+                        Icon(icon, color: iconColor, size: 20),
+                      if (icon != null) const SizedBox(width: 6),
+                      Text(
+                        question["options"][i],
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          color: borderColor,
+                        ),
                       ),
-                    ),
+                    ],
                   ),
                 ),
               ),

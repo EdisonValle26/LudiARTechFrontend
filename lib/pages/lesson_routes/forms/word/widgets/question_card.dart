@@ -57,9 +57,9 @@ class QuestionCard extends StatelessWidget {
         index: index,
         question: question,
         selectedValue: selectedValue,
+        reviewMode: reviewMode,
+        score: score,
         onAnswerSelected: onAnswerSelected,
-        // reviewMode: reviewMode,
-        // score: score,
       );
     }
 
