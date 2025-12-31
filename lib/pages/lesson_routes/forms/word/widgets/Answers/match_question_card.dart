@@ -3,12 +3,16 @@ import 'package:flutter/material.dart';
 class MatchQuestionCard extends StatefulWidget {
   final int index;
   final Map<String, dynamic> question;
+  final bool reviewMode;
+  final double score;
   final Function(double) onScoreCalculated;
 
   const MatchQuestionCard({
     super.key,
     required this.index,
     required this.question,
+    required this.reviewMode,
+    required this.score,
     required this.onScoreCalculated,
   });
 
@@ -43,6 +47,13 @@ class _MatchQuestionCardState extends State<MatchQuestionCard> {
     leftItems = List<String>.from(widget.question["left"]);
     rightItems = List<String>.from(widget.question["right"]);
     correct = Map<String, String>.from(widget.question["correct"]);
+
+    /// recuperar respuestas del usuario
+    if (widget.question["userMatches"] != null) {
+      matches.addAll(
+        Map<String, String>.from(widget.question["userMatches"]),
+      );
+    }
   }
 
   Color colorFor(String key) {
@@ -55,7 +66,7 @@ class _MatchQuestionCardState extends State<MatchQuestionCard> {
 
     matches.forEach((l, r) {
       if (correct[l] == r) {
-        score += 0.25;
+        score += 1 / correct.length;
       }
     });
 
@@ -64,34 +75,62 @@ class _MatchQuestionCardState extends State<MatchQuestionCard> {
   }
 
   void selectLeft(String value) {
+    if (widget.reviewMode) return;
     if (matches.containsKey(value)) return;
     setState(() => selectedLeft = value);
   }
 
   void selectRight(String value) {
+    if (widget.reviewMode) return;
     if (selectedLeft == null) return;
     if (matches.containsValue(value)) return;
 
     setState(() {
       matches[selectedLeft!] = value;
+
+      /// guardar respuesta
+      widget.question["userMatches"] = matches;
+
       selectedLeft = null;
       calculateScore();
     });
   }
 
   void removeMatch(String left) {
+    if (widget.reviewMode) return;
+
     setState(() {
       matches.remove(left);
+      widget.question["userMatches"] = matches;
       calculateScore();
     });
   }
 
   Widget buildItem({
     required String text,
-    required bool active,
-    required Color color,
+    required bool isMatched,
+    required bool isCorrect,
+    required Color baseColor,
     required VoidCallback? onTap,
   }) {
+    Color borderColor = Colors.grey.shade300;
+    Color bgColor = Colors.white;
+
+    if (!widget.reviewMode && isMatched) {
+      borderColor = baseColor;
+      bgColor = baseColor.withOpacity(0.18);
+    }
+
+    if (widget.reviewMode && isMatched) {
+      if (isCorrect) {
+        borderColor = Colors.green;
+        bgColor = Colors.green.withOpacity(0.18);
+      } else {
+        borderColor = Colors.red;
+        bgColor = Colors.red.withOpacity(0.18);
+      }
+    }
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -100,12 +139,9 @@ class _MatchQuestionCardState extends State<MatchQuestionCard> {
         padding: const EdgeInsets.symmetric(horizontal: 14),
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: active ? color.withOpacity(0.18) : Colors.white,
+          color: bgColor,
           borderRadius: BorderRadius.circular(radius),
-          border: Border.all(
-            color: active ? color : Colors.grey.shade300,
-            width: borderWidth,
-          ),
+          border: Border.all(color: borderColor, width: borderWidth),
         ),
         child: Text(
           text,
@@ -126,9 +162,23 @@ class _MatchQuestionCardState extends State<MatchQuestionCard> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          widget.question["question"],
-          style: const TextStyle(fontWeight: FontWeight.bold),
+        Row(
+          children: [
+            Expanded(
+              child: Text(
+                widget.question["question"],
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
+            ),
+            if (widget.reviewMode)
+              Text(
+                "P: ${widget.score.toStringAsFixed(2)} / 1.00",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: widget.score == 1.0 ? Colors.green : Colors.red,
+                ),
+              ),
+          ],
         ),
         const SizedBox(height: 12),
 
@@ -167,15 +217,18 @@ class _MatchQuestionCardState extends State<MatchQuestionCard> {
               child: Column(
                 children: leftItems.map((l) {
                   final isMatched = matches.containsKey(l);
-                  final isSelected = selectedLeft == l;
+                  final isCorrect =
+                      isMatched && matches[l] == correct[l];
                   final color = colorFor(l);
 
                   return buildItem(
                     text: l,
-                    active: isMatched || isSelected,
-                    color: color,
-                    onTap: () =>
-                        isMatched ? removeMatch(l) : selectLeft(l),
+                    isMatched: isMatched || selectedLeft == l,
+                    isCorrect: isCorrect,
+                    baseColor: color,
+                    onTap: isMatched
+                        ? () => removeMatch(l)
+                        : () => selectLeft(l),
                   );
                 }).toList(),
               ),
@@ -187,29 +240,29 @@ class _MatchQuestionCardState extends State<MatchQuestionCard> {
             Expanded(
               child: Column(
                 children: rightItems.map((r) {
-                  final isUsed = matches.containsValue(r);
-                  final leftKey = matches.entries
-                      .firstWhere(
-                        (e) => e.value == r,
-                        orElse: () => const MapEntry("", ""),
-                      )
-                      .key;
+                  final entry = matches.entries.firstWhere(
+                    (e) => e.value == r,
+                    orElse: () => const MapEntry("", ""),
+                  );
 
+                  final isMatched = entry.key.isNotEmpty;
+                  final isCorrect =
+                      isMatched && correct[entry.key] == r;
                   final color =
-                      leftKey.isNotEmpty ? colorFor(leftKey) : Colors.grey;
+                      isMatched ? colorFor(entry.key) : Colors.grey;
 
                   return buildItem(
                     text: r,
-                    active: isUsed,
-                    color: color,
-                    onTap: isUsed ? null : () => selectRight(r),
+                    isMatched: isMatched,
+                    isCorrect: isCorrect,
+                    baseColor: color,
+                    onTap: isMatched ? null : () => selectRight(r),
                   );
                 }).toList(),
               ),
             ),
           ],
         ),
-        const SizedBox(height: 10),
       ],
     );
   }

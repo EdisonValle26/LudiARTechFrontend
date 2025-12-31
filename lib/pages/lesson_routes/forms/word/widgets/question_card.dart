@@ -32,6 +32,8 @@ class QuestionCard extends StatelessWidget {
       return OrderQuestionCard(
         index: index,
         question: question,
+        reviewMode: reviewMode,
+        score: score,
         onScoreCalculated: (s) => onAnswerSelected("order", s),
       );
     }
@@ -40,6 +42,8 @@ class QuestionCard extends StatelessWidget {
       return FillBlankQuestionCard(
         index: index,
         question: question,
+        reviewMode: reviewMode,
+        score: score,
         onScoreCalculated: (s) => onAnswerSelected("fill", s),
       );
     }
@@ -48,7 +52,11 @@ class QuestionCard extends StatelessWidget {
       return MatchQuestionCard(
         index: index,
         question: question,
-        onScoreCalculated: (s) => onAnswerSelected("match", s),
+        reviewMode: reviewMode,
+        score: score,
+        onScoreCalculated: (s) {
+          onAnswerSelected("match", s);
+        },
       );
     }
 

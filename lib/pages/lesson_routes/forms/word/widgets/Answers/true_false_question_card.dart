@@ -126,9 +126,8 @@ class TrueFalseQuestionCard extends StatelessWidget {
                       if (icon != null) const SizedBox(width: 6),
                       Text(
                         question["options"][i],
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontWeight: FontWeight.w600,
-                          color: borderColor,
                         ),
                       ),
                     ],
