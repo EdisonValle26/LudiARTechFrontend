@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../widgets/background.dart';
-import 'providers/routes_provider.dart';
+import '../providers/routes_provider.dart';
 import 'widgets/learning_paths_form.dart';
 import 'widgets/learning_paths_header.dart';
 

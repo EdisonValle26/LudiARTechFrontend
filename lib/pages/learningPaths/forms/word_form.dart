@@ -1,10 +1,12 @@
+import 'package:LudiArtech/enum/learning_paths_enum.dart';
+import 'package:LudiArtech/pages/learningPaths/widgets/learning_paths_model.dart';
 import 'package:flutter/material.dart';
 
 import '../widgets/learning_paths_card.dart';
-import '../widgets/nivel_model.dart';
 
 class WordForm extends StatelessWidget {
   final double scale;
+
   const WordForm({super.key, required this.scale});
 
   @override
@@ -12,6 +14,14 @@ class WordForm extends StatelessWidget {
     final size = MediaQuery.of(context).size;
     final w = size.width;
     final h = size.height;
+
+    final leccion = LearningPathsModel(
+      titulo: "Lección de Microsoft Word",
+      subtitulo: "Desbloqueada",
+      estado: LearningStatusEnum.desbloqueada,
+    );
+
+    final bool isEnabled = leccion.estado == LearningStatusEnum.desbloqueada;
 
     return Container(
       width: w,
@@ -29,43 +39,16 @@ class WordForm extends StatelessWidget {
           children: [
             LearningPathsCard(
               scale: scale,
-              tituloGeneral: "Aplicaciones Ofimaticas Word en Línea",
+              imagePath: "MS_Word.png",
+              imageSize: 70,
+              tituloGeneral: "Microsoft Word",
               porcentaje: 65,
-              leccionesCompletadas: 13,
-              leccionesTotales: 20,
-              calificacion: 6.8,
-              niveles: [
-                NivelModel(
-                  completado: true,
-                  isLast: false,
-                  titulo: "Ejemplo (Introducción a Word)",
-                  subtitulo: "Completado - 100%",
-                  etiqueta: "Básico",
-                  etiquetaFondo: Colors.greenAccent,
-                  etiquetaTexto: Colors.green,
-                  numeroColor: Colors.green,
-                ),
-                NivelModel(
-                  completado: false,
-                  isLast: false,
-                  titulo: "Ejemplo (Gráficos y tablas dinámicas)",
-                  subtitulo: "En progreso - 7 de 12 temas",
-                  etiqueta: "Intermedio",
-                  etiquetaFondo: Colors.yellowAccent,
-                  etiquetaTexto: Colors.orange,
-                  numeroColor: Colors.yellow,
-                ),
-                NivelModel(
-                  completado: false,
-                  isLast: true,
-                  titulo: "Ejemplo (Macro VBA)",
-                  subtitulo: "Boqueada",
-                  etiqueta: "Avanzado",
-                  etiquetaFondo: Colors.redAccent.shade100,
-                  etiquetaTexto: Colors.red,
-                  numeroColor: Colors.redAccent.shade100,
-                ),
-              ],
+              leccionesCompletadas: 0,
+              leccionesTotales: 1,
+              calificacion: 6.25,
+              calificacionesTotales: 10,
+              leccion: leccion,
+              isEnabled: isEnabled
             ),
           ],
         ),

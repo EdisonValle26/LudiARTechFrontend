@@ -1,30 +1,40 @@
+import 'package:LudiArtech/models/lesson_args.dart';
+import 'package:LudiArtech/pages/learningPaths/widgets/instructions_card.dart';
+import 'package:LudiArtech/pages/learningPaths/widgets/learning_header_widget.dart';
 import 'package:LudiArtech/routes/app_routes.dart';
+import 'package:LudiArtech/widgets/firebase_image.dart';
 import 'package:flutter/material.dart';
 
 import 'data_box.dart';
-import 'nivel_item.dart';
-import 'nivel_model.dart';
+import 'learning_paths_model.dart';
 
 class LearningPathsCard extends StatelessWidget {
   final double scale;
 
   final String tituloGeneral;
+  final String imagePath;
+  final int imageSize;
   final int porcentaje;
   final int leccionesCompletadas;
   final int leccionesTotales;
   final double calificacion;
-
-  final List<NivelModel> niveles;
+  final int calificacionesTotales;
+  final LearningPathsModel leccion;
+  final bool isEnabled;
 
   const LearningPathsCard({
     super.key,
     required this.scale,
     required this.tituloGeneral,
+    required this.imagePath,
+    required this.imageSize,
     required this.porcentaje,
     required this.leccionesCompletadas,
     required this.leccionesTotales,
     required this.calificacion,
-    required this.niveles,
+    required this.calificacionesTotales,
+    required this.leccion,
+    required this.isEnabled,
   });
 
   @override
@@ -38,18 +48,18 @@ class LearningPathsCard extends StatelessWidget {
     return Container(
       width: w,
       decoration: BoxDecoration(
-    color: Colors.white,
-    borderRadius: BorderRadius.circular(16),
-    border: Border.all(
-      color: Colors.white,
-      width: 2 * scale,
-    ),
-  ),
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: Colors.white,
+          width: 2 * scale,
+        ),
+      ),
       padding: EdgeInsets.fromLTRB(
-        w * 0.08 * scale,
+        w * 0.04 * scale,
         h * 0.03 * scale,
-        w * 0.08 * scale,
-        h * 0.02 * scale,
+        w * 0.04 * scale,
+        h * 0 * scale,
       ),
       child: Column(
         children: [
@@ -62,15 +72,14 @@ class LearningPathsCard extends StatelessWidget {
                     color: Colors.grey.shade200,
                     borderRadius: BorderRadius.circular(18),
                   ),
-                  child: Icon(
-                    Icons.desktop_mac_outlined,
-                    size: 45 * scale,
-                    color: Colors.blueAccent,
+                  child: FirebaseImage(
+                    path: imagePath,
+                    width: scale * imageSize,
+                    height: scale * imageSize,
+                    fit: BoxFit.cover,
                   ),
                 ),
-
                 SizedBox(height: 12 * scale),
-
                 Text(
                   tituloGeneral,
                   style: TextStyle(
@@ -79,9 +88,7 @@ class LearningPathsCard extends StatelessWidget {
                   ),
                   textAlign: TextAlign.center,
                 ),
-
                 SizedBox(height: sectionSpacing * 1.2),
-
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -101,61 +108,72 @@ class LearningPathsCard extends StatelessWidget {
                     ),
                     DataBox(
                       scale: scale,
-                      title: "$calificacion",
-                      subtitle: "Calificación",
+                      title: "$calificacion/$calificacionesTotales",
+                      subtitle: "  Calificación",
                       color: Colors.amber,
                       icon: Icons.star,
                       small: true,
                     ),
                   ],
                 ),
-
                 SizedBox(height: sectionSpacing * 2),
-
                 Column(
-                  children: List.generate(
-                    niveles.length,
-                    (i) => Padding(
-                      padding: EdgeInsets.only(bottom: 5 * scale),
-                      child: NivelItem(
-                        numero: i + 1,
-                        model: niveles[i]..isLast = (i == niveles.length - 1),
-                        scale: scale * 0.8,
-                      ),
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    LearningPathsHeaderWidget(
+                      leccion: leccion,
+                      scale: scale,
                     ),
-                  ),
-                ),
+                    SizedBox(height: 20 * scale),
+                    LearningInstructionsCard(
+                      estado: leccion.estado,
+                      scale: scale,
+                    ),
+                  ],
+                )
               ],
             ),
           ),
-
           SizedBox(height: sectionSpacing * 2),
-
           SizedBox(
             width: double.infinity,
             child: ElevatedButton.icon(
               style: ElevatedButton.styleFrom(
                 padding: EdgeInsets.symmetric(vertical: 16 * scale),
-                backgroundColor: Colors.deepPurple.shade300,
+                backgroundColor: isEnabled
+                    ? Colors.deepPurple.shade300
+                    : Colors.grey.shade400,
+                disabledBackgroundColor: Colors.grey.shade400,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15),
                 ),
               ),
-              icon: const Icon(Icons.bar_chart, color: Colors.white),
+              icon: Icon(
+                Icons.bar_chart,
+                color: isEnabled ? Colors.white : Colors.grey.shade700,
+              ),
               label: Text(
-                "Continúa lección actual",
+                "Continuar Lección",
                 style: TextStyle(
                   fontSize: 17 * scale,
-                  color: Colors.white,
+                  color: isEnabled ? Colors.white : Colors.grey.shade700,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              onPressed: () {
-                Navigator.pushNamed(context, AppRoutes.home);
-              },
+              onPressed: isEnabled
+                  ? () {
+                      Navigator.pushNamed(
+                        context,
+                        AppRoutes.lesson,
+                        arguments: LessonArgs(
+                          title: 'Lección de $tituloGeneral',
+                          imagePath: 'Tech_instrucciones_leccion.png',
+                        ),
+                      );
+                    }
+                  : null,
             ),
           ),
-
           SizedBox(height: sectionSpacing * 4),
         ],
       ),

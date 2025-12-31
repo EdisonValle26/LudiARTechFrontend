@@ -1,26 +1,25 @@
 import 'package:LudiArtech/enum/learning_paths_enum.dart';
+import 'package:LudiArtech/pages/learningPaths/widgets/learning_paths_card.dart';
 import 'package:LudiArtech/pages/learningPaths/widgets/learning_paths_model.dart';
 import 'package:flutter/material.dart';
 
-import '../widgets/learning_paths_card.dart';
 
-class PowerPointForm extends StatelessWidget {
+class ExcelForm extends StatelessWidget {
   final double scale;
-  const PowerPointForm({super.key, required this.scale});
+  const ExcelForm({super.key, required this.scale});
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final w = size.width;
     final h = size.height;
-
     final leccion = LearningPathsModel(
-      titulo: "Lección de Microsoft Power Point",
-      subtitulo: "Bloqueada",
-      estado: LearningStatusEnum.desbloqueada,
+      titulo: "Lección de Microsoft Excel dentro de Excel",
+      subtitulo: "Completada",
+      estado: LearningStatusEnum.completada,
     );
 
-    final bool isEnabled = leccion.estado == LearningStatusEnum.desbloqueada;
+    final bool isEnabled = leccion.estado == LearningStatusEnum.completada;
 
     return Container(
       width: w,
@@ -38,9 +37,9 @@ class PowerPointForm extends StatelessWidget {
           children: [
             LearningPathsCard(
               scale: scale,
-              imagePath: "MS_PP.png",
+              imagePath: "MS_Excel.png",
               imageSize: 70,
-              tituloGeneral: "Microsoft Power Point",
+              tituloGeneral: "Microsoft Excel",
               porcentaje: 65,
               leccionesCompletadas: 0,
               leccionesTotales: 1,

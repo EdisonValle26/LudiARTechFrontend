@@ -2,13 +2,29 @@ import 'package:flutter/material.dart';
 
 class BackButtonWidget extends StatelessWidget {
   final double scale;
-  final String routeName;
+  final VoidCallback? onTap;
+  final String? routeName;
 
   const BackButtonWidget({
     super.key,
     required this.scale,
-    required this.routeName,
+    this.routeName,
+    this.onTap,
   });
+
+  void _handleTap(BuildContext context) {
+    if (onTap != null) {
+      onTap!();
+      return;
+    }
+
+    if (routeName != null) {
+      Navigator.pushNamed(context, routeName!);
+      return;
+    }
+
+    Navigator.pop(context);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +32,7 @@ class BackButtonWidget extends StatelessWidget {
       top: 15 * scale,
       left: 15 * scale,
       child: GestureDetector(
-        onTap: () => Navigator.pushNamed(context, routeName),
+        onTap: () => _handleTap(context),
         child: Container(
           padding: EdgeInsets.symmetric(
             horizontal: 12 * scale,

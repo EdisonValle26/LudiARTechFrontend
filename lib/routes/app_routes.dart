@@ -1,9 +1,12 @@
+import 'package:LudiArtech/models/lesson_args.dart';
 import 'package:LudiArtech/pages/activityCenter/activity_center_screen.dart';
 import 'package:LudiArtech/pages/configuration/configuration_screen.dart';
 import 'package:LudiArtech/pages/forgetPassword/forget_password_screen.dart';
 import 'package:LudiArtech/pages/games/sliding_puzzle/sliding_puzzle_screen.dart';
 import 'package:LudiArtech/pages/home/home_screen.dart';
 import 'package:LudiArtech/pages/learningPaths/learning_paths_screen.dart';
+import 'package:LudiArtech/pages/lesson/lesson_screen.dart';
+import 'package:LudiArtech/pages/lesson_routes/lesson_routes_screen.dart';
 import 'package:LudiArtech/pages/onboarding/onboarding_screen.dart';
 import 'package:LudiArtech/pages/personalInfo/personal_info_screen.dart';
 import 'package:LudiArtech/pages/privacyPolicy/privacy_policy_screen.dart';
@@ -42,6 +45,8 @@ class AppRoutes {
   static const String forgetPassword = '/forgetPassword';
   static const String recoverPassword = '/recoverPassword';
   static const String slidingPuzzle = '/slidingPuzzle';
+  static const String lesson = '/lesson';
+  static const String lessonRoutes = '/lessonRoutes';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -80,11 +85,22 @@ class AppRoutes {
       case privacyPolicy:
         return MaterialPageRoute(builder: (_) => const PrivacyPolicyScreen());
       case forgetPassword:
-        return MaterialPageRoute(builder: (_) => const ForgetPasswordFormScreen());
+        return MaterialPageRoute(
+            builder: (_) => const ForgetPasswordFormScreen());
       case recoverPassword:
         return MaterialPageRoute(builder: (_) => const RecoverPasswordScreen());
       case slidingPuzzle:
         return MaterialPageRoute(builder: (_) => const SlidingPuzzleScreen());
+      case lesson:
+        final args = settings.arguments as LessonArgs;
+
+        return MaterialPageRoute(
+          builder: (_) => const LessonScreen(),
+          settings: RouteSettings(arguments: args),
+        );
+      case lessonRoutes:
+      final args = settings.arguments as LessonArgs;
+        return MaterialPageRoute(builder: (_) => const LessonRoutesScreen(), settings: RouteSettings(arguments: args));
       default:
         return MaterialPageRoute(
           builder: (_) => const Scaffold(

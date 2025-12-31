@@ -2,32 +2,47 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:LudiArtech/models/puzzle_tile.dart';
+import 'package:LudiArtech/routes/app_routes.dart';
+import 'package:LudiArtech/services/api_service.dart';
+import 'package:LudiArtech/services/game_service.dart';
+import 'package:LudiArtech/services/token_storage.dart';
+import 'package:LudiArtech/utils/api_constants.dart';
+import 'package:LudiArtech/widgets/dialogs/app_dialog.dart';
+import 'package:LudiArtech/widgets/dialogs/dialog_button.dart';
 import 'package:flutter/material.dart';
 
-import 'puzzle_tile_widget.dart';
+import 'puzzle_grid.dart';
+import 'puzzle_info_cards.dart';
+import 'puzzle_mix_button.dart';
 
 class SlidingPuzzleForm extends StatefulWidget {
   final double scale;
-  const SlidingPuzzleForm({super.key, required this.scale});
+  final VoidCallback? onExitGame;
+  const SlidingPuzzleForm({super.key, required this.scale, this.onExitGame});
 
   @override
-  State<SlidingPuzzleForm> createState() => _SlidingPuzzleFormState();
+  State<SlidingPuzzleForm> createState() => SlidingPuzzleFormState();
 }
 
-class _SlidingPuzzleFormState extends State<SlidingPuzzleForm> {
-  static const int gridSize = 3;
+class SlidingPuzzleFormState extends State<SlidingPuzzleForm> {
+  final GameResultService _gameResultService =
+      GameResultService(ApiService(ApiConstants.baseUrl));
 
+  static const int gridSize = 3;
   late List<PuzzleTile> tiles;
 
-  int remainingMoves = 20;
-  int remainingSeconds = 180; // 3 minutos
+  bool gameStarted = false;
+  bool _resultSent = false;
+
+  int remainingMoves = 100;
+  int remainingSeconds = 180;
+
   Timer? _timer;
 
   @override
   void initState() {
     super.initState();
     _initGame();
-    _startTimer();
   }
 
   @override
@@ -36,10 +51,12 @@ class _SlidingPuzzleFormState extends State<SlidingPuzzleForm> {
     super.dispose();
   }
 
-  // ------------------ GAME INIT ------------------
   void _initGame() {
-    remainingMoves = 20;
+    _timer?.cancel();
+    gameStarted = false;
+    remainingMoves = 100;
     remainingSeconds = 180;
+    _resultSent = false;
 
     tiles = [
       PuzzleTile(value: 1, label: 'Colocar cursor en el documento'),
@@ -57,17 +74,28 @@ class _SlidingPuzzleFormState extends State<SlidingPuzzleForm> {
     setState(() {});
   }
 
-  // ------------------ TIMER ------------------
+  void exitGameAsLose() {
+    _timer?.cancel();
+    _sendGameResult("LOSE");
+  }
+
   void _startTimer() {
     _timer?.cancel();
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (remainingSeconds == 0) {
         timer.cancel();
-        _showLoseDialog("⏱ Se acabó el tiempo");
+        _sendGameResult("LOSE");
+        _showLoseDialog("🕕 Se acabó el tiempo");
       } else {
         setState(() => remainingSeconds--);
       }
     });
+  }
+
+  void stopGame() {
+    _timer?.cancel();
+    _timer = null;
+    gameStarted = false;
   }
 
   String _formatTime() {
@@ -76,10 +104,14 @@ class _SlidingPuzzleFormState extends State<SlidingPuzzleForm> {
     return '${min.toString().padLeft(2, '0')}:${sec.toString().padLeft(2, '0')}';
   }
 
-  // ------------------ MOVEMENT ------------------
   void _onTileTap(int index) {
     final emptyIndex = tiles.indexWhere((t) => t.isEmpty);
     if (!_isAdjacent(index, emptyIndex)) return;
+
+    if (!gameStarted) {
+      gameStarted = true;
+      _startTimer();
+    }
 
     setState(() {
       final temp = tiles[index];
@@ -89,12 +121,14 @@ class _SlidingPuzzleFormState extends State<SlidingPuzzleForm> {
     });
 
     if (remainingMoves == 0) {
+      _sendGameResult("LOSE");
       _showLoseDialog("🔄 Se acabaron los movimientos");
       return;
     }
 
     if (_isSolved()) {
       _timer?.cancel();
+      _sendGameResult("WIN");
       _showWinDialog();
     }
   }
@@ -116,49 +150,82 @@ class _SlidingPuzzleFormState extends State<SlidingPuzzleForm> {
     return true;
   }
 
-  // ------------------ DIALOGS ------------------
+  void _showWinDialog() {
+    AppDialog.show(
+      context: context,
+      title: "🎉 ¡Felicidades!",
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text("Completaste el proceso correctamente."),
+          const SizedBox(height: 8),
+          Text("⏱ Tiempo: ${_formatTime()}"),
+          Text("⭐ Movimientos restantes: $remainingMoves"),
+          const Text("🔥 Haz conseguido +1 racha"),
+        ],
+      ),
+      buttons: [
+        DialogButton(
+          text: "Volver",
+          isPrimary: true,
+          onPressed: () {
+            Navigator.pop(context);
+            Navigator.pushNamed(context, AppRoutes.activityCenter);
+          },
+        ),
+      ],
+    );
+  }
+
   void _showLoseDialog(String reason) {
     _timer?.cancel();
-    showDialog(
+
+    AppDialog.show(
       context: context,
-      builder: (_) => AlertDialog(
-        title: const Text("❌ Perdiste una vida"),
-        content: Text(reason),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-              _initGame();
-              _startTimer();
-            },
-            child: const Text("Reiniciar"),
-          )
-        ],
-      ),
+      title: "❌ Perdiste una vida",
+      content: Text(reason),
+      buttons: [
+        DialogButton(
+          text: "Reiniciar",
+          isPrimary: true,
+          onPressed: () {
+            Navigator.pop(context);
+            _initGame();
+          },
+        ),
+        DialogButton(
+          text: "Volver",
+          onPressed: () {
+            Navigator.pop(context);
+            widget.onExitGame?.call();
+            Navigator.pushNamed(context, AppRoutes.activityCenter);
+          },
+        ),
+      ],
     );
   }
 
-  void _showWinDialog() {
-    showDialog(
+  void _showNoLivesDialog() {
+    AppDialog.show(
       context: context,
-      builder: (_) => AlertDialog(
-        title: const Text("🎉 ¡Felicidades!"),
-        content: const Text("Completaste el proceso correctamente."),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-              _initGame();
-              _startTimer();
-            },
-            child: const Text("Reiniciar"),
-          )
-        ],
+      title: "💀 Sin vidas",
+      content: const Text(
+        "Te quedaste sin vidas.\n\nDebes esperar 10 minutos para recuperar una vida.",
       ),
+      buttons: [
+        DialogButton(
+          text: "Volver",
+          isPrimary: true,
+          onPressed: () {
+            Navigator.pop(context);
+            Navigator.pushNamed(context, AppRoutes.activityCenter);
+          },
+        ),
+      ],
     );
   }
 
-  // ------------------ UI ------------------
   @override
   Widget build(BuildContext context) {
     final w = MediaQuery.of(context).size.width;
@@ -167,117 +234,58 @@ class _SlidingPuzzleFormState extends State<SlidingPuzzleForm> {
       padding: EdgeInsets.all(16 * widget.scale),
       child: Column(
         children: [
-          // ---------- TITULO ----------
           Text(
             "Proceso de inserción de imagen en Microsoft Word",
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontSize: w * 0.045 * widget.scale,
+              fontSize: w * 0.055 * widget.scale,
               fontWeight: FontWeight.bold,
             ),
           ),
-
           const SizedBox(height: 20),
-
-          // ---------- INFO CARDS ----------
-          Row(
-            children: [
-              _infoCard(
-                title: "Tiempo",
-                value: _formatTime(),
-                icon: Icons.timer,
-              ),
-              const SizedBox(width: 12),
-              _infoCard(
-                title: "Movimientos",
-                value: "$remainingMoves / 20",
-                icon: Icons.swap_horiz,
-              ),
-            ],
+          PuzzleInfoCards(
+            time: _formatTime(),
+            remainingMoves: remainingMoves,
           ),
-
           const SizedBox(height: 25),
-
-          // ---------- PUZZLE ----------
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: Colors.lightBlueAccent.withOpacity(0.50),
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: GridView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: tiles.length,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: gridSize,
-                crossAxisSpacing: 5,
-                mainAxisSpacing: 10,
-              ),
-              itemBuilder: (context, index) {
-                return PuzzleTileWidget(
-                  tile: tiles[index],
-                  onTap: () => _onTileTap(index),
-                );
-              },
-            ),
+          PuzzleGrid(
+            tiles: tiles,
+            gridSize: gridSize,
+            onTileTap: _onTileTap,
           ),
-
           const SizedBox(height: 25),
-
-          // ---------- MIX BUTTON ----------
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton.icon(
-              icon: const Icon(Icons.shuffle),
-              label: const Text("Mezclar"),
-              onPressed: () {
-                _initGame();
-                _startTimer();
-              },
-            ),
+          PuzzleMixButton(
+            onPressed: () {
+              _initGame();
+            },
           ),
         ],
       ),
     );
   }
 
-  Widget _infoCard({
-    required String title,
-    required String value,
-    required IconData icon,
-  }) {
-    return Expanded(
-      child: Container(
-        padding: const EdgeInsets.all(14),
-        decoration: BoxDecoration(
-          color: Colors.blue,
-          borderRadius: BorderRadius.circular(14),
-        ),
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-              Icon(icon, size: 24, color: Colors.white),
-              const SizedBox(width: 6),
-              Text(
-                title,
-                style: const TextStyle(
-                    fontWeight: FontWeight.w600, color: Colors.white),
-              ),
-            ]),
-            const SizedBox(height: 4),
-            Text(
-              value,
-              style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                  color: Colors.white),
-            ),
-          ],
-        ),
-      ),
-    );
+  Future<void> _sendGameResult(String status) async {
+    if (_resultSent) return;
+    _resultSent = true;
+
+    final token = await TokenStorage.getToken();
+    if (token == null) return;
+
+    final usedMoves = 100 - remainingMoves;
+    final usedTime = 180 - remainingSeconds;
+
+    try {
+      await _gameResultService.sendResult(
+        token: token,
+        gameId: 1,
+        status: status, // "WIN" o "LOSE"
+        usedMoves: usedMoves,
+        totalMoves: 100,
+        usedTime: usedTime,
+        totalTime: 180,
+      );
+    } catch (e) {
+      debugPrint("Error enviando resultado: $e");
+    }
   }
 }

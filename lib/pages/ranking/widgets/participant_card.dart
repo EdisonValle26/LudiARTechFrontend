@@ -7,7 +7,6 @@ class ParticipantCard extends StatelessWidget {
   final int number;
   final Color color;
   final Color colorNumber;
-  final IconData icon1;
   final IconData icon2;
   final int points;
   final bool crown;
@@ -20,16 +19,27 @@ class ParticipantCard extends StatelessWidget {
     required this.number,
     required this.color,
     required this.colorNumber,
-    required this.icon1,
     required this.icon2,
     required this.points,
     required this.crown,
     required this.sizeFactor,
   });
 
+  String _getInitials(String fullName) {
+    final parts = fullName.trim().split(RegExp(r'\s+'));
+    if (parts.isEmpty) return "";
+
+    if (parts.length == 1) {
+      return parts.first[0].toUpperCase();
+    }
+
+    return (parts[0][0] + parts[1][0]).toUpperCase();
+  }
+
   @override
   Widget build(BuildContext context) {
     final w = MediaQuery.of(context).size.width;
+    final initials = _getInitials(name);
 
     return Column(
       children: [
@@ -39,6 +49,7 @@ class ParticipantCard extends StatelessWidget {
             width: w * 0.11 * scale * sizeFactor,
             height: w * 0.11 * scale * sizeFactor,
           ),
+
         Stack(
           clipBehavior: Clip.none,
           children: [
@@ -49,8 +60,20 @@ class ParticipantCard extends StatelessWidget {
                 color: color,
                 borderRadius: BorderRadius.circular(14),
               ),
-              child: Icon(icon1, size: w * 0.10 * scale * sizeFactor),
+
+              child: Center(
+                child: Text(
+                  initials,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: w * 0.06 * scale * sizeFactor,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 1.2,
+                  ),
+                ),
+              ),
             ),
+
             Positioned(
               top: -(w * 0.02 * scale * sizeFactor),
               right: -(w * 0.02 * scale * sizeFactor),
@@ -69,13 +92,17 @@ class ParticipantCard extends StatelessWidget {
             ),
           ],
         ),
+
         SizedBox(height: w * 0.02),
+
         Container(
           width: w * 0.20 * scale * sizeFactor,
           padding: const EdgeInsets.all(6),
           decoration: BoxDecoration(
             color: color.withOpacity(0.7),
-            borderRadius: BorderRadius.vertical(top: Radius.circular(14)),
+            borderRadius: const BorderRadius.vertical(
+              top: Radius.circular(14),
+            ),
           ),
           child: Column(
             children: [
@@ -87,13 +114,16 @@ class ParticipantCard extends StatelessWidget {
                   fontSize: w * 0.04 * scale,
                 ),
               ),
-              Text("pts"),
+              const Text("pts"),
             ],
           ),
         ),
+
         SizedBox(height: w * 0.02),
+
         Text(
           name,
+          textAlign: TextAlign.center,
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: w * 0.035 * scale,

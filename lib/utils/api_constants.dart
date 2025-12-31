@@ -12,4 +12,10 @@ class ApiConstants {
   static const String userCreate = "/users";
   static const String userGet = "/users/me";
   static const String userUpdate = "/users/update";
+
+  // Ranking
+  static const String rankingGet = "/ranking";
+
+    // Ranking
+  static const String games = "/games";
 }

@@ -1,8 +1,7 @@
 import 'package:LudiArtech/enum/learning_paths_enum.dart';
+import 'package:LudiArtech/pages/learningPaths/widgets/learning_paths_card.dart';
 import 'package:LudiArtech/pages/learningPaths/widgets/learning_paths_model.dart';
 import 'package:flutter/material.dart';
-
-import '../widgets/learning_paths_card.dart';
 
 class PowerPointForm extends StatelessWidget {
   final double scale;
@@ -17,7 +16,7 @@ class PowerPointForm extends StatelessWidget {
     final leccion = LearningPathsModel(
       titulo: "Lección de Microsoft Power Point",
       subtitulo: "Bloqueada",
-      estado: LearningStatusEnum.desbloqueada,
+      estado: LearningStatusEnum.bloqueada,
     );
 
     final bool isEnabled = leccion.estado == LearningStatusEnum.desbloqueada;

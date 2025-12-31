@@ -26,19 +26,18 @@ class DataBox extends StatelessWidget {
             ? Text(
                 title,
                 style: TextStyle(
-                  fontSize: (small ? 22 : 28) * scale,
+                  fontSize: (small ? 20 : 26) * scale,
                   fontWeight: FontWeight.bold,
                   color: color,
                 ),
               )
             : Row(
                 children: [
-                  Icon(icon, color: color, size: (small ? 24 : 30) * scale),
-                  SizedBox(width: 5 * scale),
+                  Icon(icon, color: color, size: (small ? 20 : 26) * scale),
                   Text(
                     title,
                     style: TextStyle(
-                      fontSize: (small ? 22 : 28) * scale,
+                      fontSize: (small ? 18 : 24) * scale,
                       fontWeight: FontWeight.bold,
                       color: color,
                     ),

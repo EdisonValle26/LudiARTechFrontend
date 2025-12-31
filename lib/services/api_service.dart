@@ -9,34 +9,28 @@ class ApiService {
 
   ApiService(this.baseUrl);
 
-  /// POST SIN TOKEN
-  Future<Map<String, dynamic>> post(
+  //POST SIN TOKEN
+  Future<dynamic> post(
     String endpoint, {
     Map<String, dynamic>? body,
   }) async {
-    final url = Uri.parse('$baseUrl$endpoint');
-
     final response = await http.post(
-      url,
-      headers: {
-        "Content-Type": "application/json",
-      },
+      Uri.parse('$baseUrl$endpoint'),
+      headers: {"Content-Type": "application/json"},
       body: jsonEncode(body),
     );
 
     return _handleResponse(response);
   }
 
-  /// POST CON TOKEN
-  Future<Map<String, dynamic>> postAuth(
+  //POST CON TOKEN
+  Future<dynamic> postAuth(
     String endpoint, {
     required String token,
     Map<String, dynamic>? body,
   }) async {
-    final url = Uri.parse('$baseUrl$endpoint');
-
     final response = await http.post(
-      url,
+      Uri.parse('$baseUrl$endpoint'),
       headers: {
         "Content-Type": "application/json",
         "Authorization": token,
@@ -47,31 +41,30 @@ class ApiService {
     return _handleResponse(response);
   }
 
-  /// GET CON TOKEN
-  Future<Map<String, dynamic>> getAuth(
+  //GET CON TOKEN
+  Future<dynamic> getAuth(
     String endpoint, {
     required String token,
   }) async {
-    final url = Uri.parse('$baseUrl$endpoint');
-
-    final response = await http.get(url, headers: {
-      "Content-Type": "application/json",
-      "Authorization": token,
-    });
+    final response = await http.get(
+      Uri.parse('$baseUrl$endpoint'),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": token,
+      },
+    );
 
     return _handleResponse(response);
   }
 
-  /// PUT CON TOKEN
-  Future<Map<String, dynamic>> putAuth(
+  //PUT CON TOKEN
+  Future<dynamic> putAuth(
     String endpoint, {
     required String token,
     Map<String, dynamic>? body,
   }) async {
-    final url = Uri.parse('$baseUrl$endpoint');
-
     final response = await http.put(
-      url,
+      Uri.parse('$baseUrl$endpoint'),
       headers: {
         "Content-Type": "application/json",
         "Authorization": token,
@@ -82,8 +75,7 @@ class ApiService {
     return _handleResponse(response);
   }
 
-  ///MANEJO CENTRALIZADO DE RESPUESTAS
-  Map<String, dynamic> _handleResponse(http.Response response) {
+  dynamic _handleResponse(http.Response response) {
     final decoded = jsonDecode(response.body);
 
     if (response.statusCode >= 200 && response.statusCode < 300) {
@@ -94,7 +86,6 @@ class ApiService {
 
     if (decoded is Map<String, dynamic>) {
       final rawMessage = decoded['message'];
-
       if (rawMessage is String) {
         message = rawMessage;
       } else if (rawMessage is List) {

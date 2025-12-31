@@ -47,7 +47,6 @@ class _ProfileFormState extends State<ProfileForm> {
     final w = width / 390;
     final h = height / 844;
 
-    final userService = UserService(ApiService(ApiConstants.baseUrl));
 
     return FutureBuilder<String?>(
       future: TokenStorage.getToken(),
@@ -55,8 +54,6 @@ class _ProfileFormState extends State<ProfileForm> {
         if (!tokenSnapshot.hasData) {
           return const Center(child: CircularProgressIndicator());
         }
-
-        final token = tokenSnapshot.data!;
 
         return FutureBuilder<UserModel>(
           future: _userFuture,

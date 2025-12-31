@@ -48,7 +48,7 @@ class ProgressHeader extends StatelessWidget {
               color: Colors.orangeAccent.shade100,
               icon: Icons.favorite,
               iconColor: Colors.red,
-              numero: "1/5",
+              numero: "5/10",
               titulo: "Vidas",
             ),
             StatCardData(
@@ -62,8 +62,8 @@ class ProgressHeader extends StatelessWidget {
               color: Colors.purpleAccent.shade100,
               icon: Icons.check,
               iconColor: Colors.green,
-              numero: "12",
-              titulo: "Aciertos",
+              numero: "10/10",
+              titulo: "Nota",
             ),
           ];
 
