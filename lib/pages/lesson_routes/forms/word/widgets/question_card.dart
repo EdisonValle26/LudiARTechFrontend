@@ -1,3 +1,4 @@
+import 'package:LudiArtech/pages/lesson_routes/forms/word/widgets/Answers/drag_group_question_card.dart';
 import 'package:LudiArtech/pages/lesson_routes/forms/word/widgets/Answers/match_question_card.dart';
 import 'package:LudiArtech/pages/lesson_routes/forms/word/widgets/Answers/true_false_question_card.dart';
 import 'package:flutter/material.dart';
@@ -68,6 +69,16 @@ class QuestionCard extends StatelessWidget {
         reviewMode: reviewMode,
         score: score,
         onAnswerSelected: onAnswerSelected,
+      );
+    }
+
+    if (type == "drag_group") {
+      return DragGroupQuestionCard(
+        index: index,
+        question: question,
+        reviewMode: reviewMode,
+        score: score,
+        onScoreCalculated: (s) => onAnswerSelected("drag_group", s),
       );
     }
 

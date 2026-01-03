@@ -93,7 +93,7 @@ class LessonForm extends StatelessWidget {
                 borderRadius: BorderRadius.circular(14),
               ),
               child: Text(
-                "Al finalizar, recibirás tu calificación de forma inmediata.  Si no apruebas, podrás reintentar la lección utilizando las rachas que hayas acumulado. El número de reintentos dependerá de la cantidad de rachas obtenidas durante tu progreso.",
+                "Al finalizar, recibirás tu calificación de forma inmediata. Si no apruebas, podrás reintentar la lección utilizando las rachas que hayas acumulado. El número de reintentos dependerá de la cantidad de rachas obtenidas durante tu progreso.",
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 10 * scale,
