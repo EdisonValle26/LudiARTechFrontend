@@ -1,4 +1,5 @@
 import 'package:LudiArtech/models/user_model.dart';
+import 'package:LudiArtech/models/user_stats_model.dart';
 
 import '../services/api_service.dart';
 import '../utils/api_constants.dart';
@@ -42,6 +43,17 @@ class UserService {
     );
 
     return UserModel.fromJson(response);
+  }
+
+  Future<UserStatsModel> getUserStats({
+    required String token,
+  }) async {
+    final response = await api.getAuth(
+      ApiConstants.userStats,
+      token: token,
+    );
+
+    return UserStatsModel.fromJson(response);
   }
 
   Future<void> updateProfile({

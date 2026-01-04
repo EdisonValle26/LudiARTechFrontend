@@ -34,7 +34,7 @@ class ProgressScreen extends StatelessWidget {
               ),
             ),
             
-            MainFooter(),
+            const MainFooter(),
           ],
         ),
       ),
