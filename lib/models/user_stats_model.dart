@@ -38,7 +38,7 @@ class UserStatsModel {
       level: json["level"],
       progress: json["progress"],
       points: json["points"],
-      lives: json["lives"],
+      lives: json["lives"] ?? 0,
       streak: json["streak"],
       badges: json["badges"],
       lessonAverage: double.parse(json["lesson_average"].toString()),

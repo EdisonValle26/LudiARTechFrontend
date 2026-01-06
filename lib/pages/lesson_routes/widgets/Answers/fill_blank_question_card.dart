@@ -230,6 +230,7 @@ class _FillBlankQuestionCardState extends State<FillBlankQuestionCard> {
             );
           }).toList(),
         ),
+        const SizedBox(height: 24),
       ],
     );
   }

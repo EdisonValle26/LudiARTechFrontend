@@ -1,10 +1,14 @@
 import 'dart:async';
 
-import 'package:LudiArtech/pages/lesson_routes/forms/word/widgets/question_card.dart';
-import 'package:LudiArtech/pages/lesson_routes/forms/word/widgets/question_footer_button.dart';
-import 'package:LudiArtech/pages/lesson_routes/forms/word/widgets/question_header.dart';
-import 'package:LudiArtech/pages/lesson_routes/forms/word/widgets/result_modal.dart';
+import 'package:LudiArtech/pages/lesson_routes/widgets/question_card.dart';
+import 'package:LudiArtech/pages/lesson_routes/widgets/question_footer_button.dart';
+import 'package:LudiArtech/pages/lesson_routes/widgets/question_header.dart';
+import 'package:LudiArtech/pages/lesson_routes/widgets/result_modal.dart';
 import 'package:LudiArtech/routes/app_routes.dart';
+import 'package:LudiArtech/services/api_service.dart';
+import 'package:LudiArtech/services/lesson_service.dart';
+import 'package:LudiArtech/services/token_storage.dart';
+import 'package:LudiArtech/utils/api_constants.dart';
 import 'package:flutter/material.dart';
 
 class WordForm extends StatefulWidget {
@@ -17,6 +21,7 @@ class WordForm extends StatefulWidget {
 }
 
 class _WordFormState extends State<WordForm> {
+  bool scoreSaved = false;
   bool reviewMode = false;
   static const int totalSeconds = 60 * 60;
   late int remainingSeconds;
@@ -234,6 +239,23 @@ class _WordFormState extends State<WordForm> {
     },
   ];
 
+  Future<void> _saveLessonScore(double score) async {
+    final token = await TokenStorage.getToken();
+
+    if (token == null) {
+      throw Exception("Token nulo");
+    }
+
+    final api = ApiService(ApiConstants.baseUrl);
+    final service = LessonService(api);
+
+    await service.completeLesson(
+      token: token,
+      lessonId: 1,
+      score: double.parse(score.toStringAsFixed(2)),
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -258,8 +280,23 @@ class _WordFormState extends State<WordForm> {
         questionScores.containsKey(start + 1);
   }
 
-  void showResultModal() {
+  void showResultModal() async {
     final double totalScore = questionScores.values.fold(0.0, (a, b) => a + b);
+
+    if (!scoreSaved) {
+      try {
+        await _saveLessonScore(totalScore);
+        scoreSaved = true;
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("Error al guardar la calificación"),
+            backgroundColor: Colors.red,
+          ),
+        );
+        return;
+      }
+    }
 
     showDialog(
       context: context,

@@ -9,7 +9,7 @@ class ApiConstants {
   static const String changePassword = "/auth/change-password";
 
   // Users
-  static const String userCreate = "/users";
+  static const String userCreate = "/users/";
   static const String userGet = "/users/me";
   static const String userUpdate = "/users/update";
   static const String userStats = "/users/stats";
@@ -22,4 +22,6 @@ class ApiConstants {
 
   // Lesson
   static const String lessonStatus = "/lessons/status";
+  static const String lessonComplete = "/lessons/complete";
+
 }

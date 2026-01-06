@@ -6,6 +6,7 @@ import 'package:LudiArtech/routes/app_routes.dart';
 import 'package:LudiArtech/services/api_service.dart';
 import 'package:LudiArtech/services/game_service.dart';
 import 'package:LudiArtech/services/token_storage.dart';
+import 'package:LudiArtech/services/user_service.dart';
 import 'package:LudiArtech/utils/api_constants.dart';
 import 'package:LudiArtech/widgets/dialogs/app_dialog.dart';
 import 'package:LudiArtech/widgets/dialogs/dialog_button.dart';
@@ -27,7 +28,8 @@ class SlidingPuzzleForm extends StatefulWidget {
 class SlidingPuzzleFormState extends State<SlidingPuzzleForm> {
   final GameResultService _gameResultService =
       GameResultService(ApiService(ApiConstants.baseUrl));
-
+  int? _lastScore;
+  bool? _streakGained;
   static const int gridSize = 3;
   late List<PuzzleTile> tiles;
 
@@ -104,7 +106,10 @@ class SlidingPuzzleFormState extends State<SlidingPuzzleForm> {
     return '${min.toString().padLeft(2, '0')}:${sec.toString().padLeft(2, '0')}';
   }
 
-  void _onTileTap(int index) {
+  void _onTileTap(int index) async {
+    final canPlay = await _checkLives();
+    if (!canPlay) return;
+
     final emptyIndex = tiles.indexWhere((t) => t.isEmpty);
     if (!_isAdjacent(index, emptyIndex)) return;
 
@@ -127,10 +132,15 @@ class SlidingPuzzleFormState extends State<SlidingPuzzleForm> {
     }
 
     if (_isSolved()) {
-      _timer?.cancel();
-      _sendGameResult("WIN");
-      _showWinDialog();
-    }
+  _timer?.cancel();
+
+  final result = await _sendGameResult("WIN");
+
+  if (result != null) {
+    _showWinDialog();
+  }
+}
+
   }
 
   bool _isAdjacent(int a, int b) {
@@ -158,11 +168,18 @@ class SlidingPuzzleFormState extends State<SlidingPuzzleForm> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text("Completaste el proceso correctamente."),
+          const Text("Completaste el juego correctamente."),
           const SizedBox(height: 8),
           Text("⏱ Tiempo: ${_formatTime()}"),
+          const SizedBox(height: 8),
           Text("⭐ Movimientos restantes: $remainingMoves"),
-          const Text("🔥 Haz conseguido +1 racha"),
+          const SizedBox(height: 8),
+          Text("🏆 Puntaje obtenido: ${_lastScore ?? 0}"),
+          const SizedBox(height: 8),
+          if (_streakGained == true)
+            const Text("🔥 ¡Ganaste +1 racha!")
+          else
+            const Text("❌ No se ganó racha esta vez"),
         ],
       ),
       buttons: [
@@ -206,12 +223,39 @@ class SlidingPuzzleFormState extends State<SlidingPuzzleForm> {
     );
   }
 
+  void _showMixConfirmDialog() {
+    AppDialog.show(
+      context: context,
+      title: "¿Mezclar cartas?",
+      content: const Text(
+        "Si mezclas las cartas perderás una vida.\n¿Deseas continuar?",
+      ),
+      buttons: [
+        DialogButton(
+          text: "No",
+          onPressed: () => Navigator.pop(context),
+        ),
+        DialogButton(
+          text: "Sí",
+          isPrimary: true,
+          onPressed: () {
+            Navigator.pop(context);
+
+            exitGameAsLose();
+
+            _initGame();
+          },
+        ),
+      ],
+    );
+  }
+
   void _showNoLivesDialog() {
     AppDialog.show(
       context: context,
       title: "💀 Sin vidas",
       content: const Text(
-        "Te quedaste sin vidas.\n\nDebes esperar 10 minutos para recuperar una vida.",
+        "Te quedaste sin vidas.\n\nDebes esperar 5 minutos para recuperar una vida.",
       ),
       buttons: [
         DialogButton(
@@ -255,8 +299,11 @@ class SlidingPuzzleFormState extends State<SlidingPuzzleForm> {
           ),
           const SizedBox(height: 25),
           PuzzleMixButton(
-            onPressed: () {
-              _initGame();
+            onPressed: () async {
+              final canPlay = await _checkLives();
+              if (!canPlay) return;
+
+              _showMixConfirmDialog();
             },
           ),
         ],
@@ -264,28 +311,63 @@ class SlidingPuzzleFormState extends State<SlidingPuzzleForm> {
     );
   }
 
-  Future<void> _sendGameResult(String status) async {
-    if (_resultSent) return;
+  Future<void> _validateBeforeStart() async {
+    final canPlay = await _checkLives();
+    if (!canPlay) return;
+
+    _initGame();
+  }
+
+  Future<GameResultResponse?> _sendGameResult(String status) async {
+    if (_resultSent) return null;
     _resultSent = true;
 
     final token = await TokenStorage.getToken();
-    if (token == null) return;
+    if (token == null) return null;
 
     final usedMoves = 100 - remainingMoves;
     final usedTime = 180 - remainingSeconds;
 
     try {
-      await _gameResultService.sendResult(
+      final result = await _gameResultService.sendResult(
         token: token,
         gameId: 1,
-        status: status, // "WIN" o "LOSE"
+        status: status,
         usedMoves: usedMoves,
         totalMoves: 100,
         usedTime: usedTime,
         totalTime: 180,
       );
+
+      _lastScore = result.score;
+      _streakGained = result.streakGained;
+
+      return result;
     } catch (e) {
       debugPrint("Error enviando resultado: $e");
+      return null;
+    }
+  }
+
+  Future<bool> _checkLives() async {
+    final token = await TokenStorage.getToken();
+    if (token == null) return false;
+
+    final api = ApiService(ApiConstants.baseUrl);
+    final userService = UserService(api);
+
+    try {
+      final stats = await userService.getUserStats(token: token);
+
+      if (stats.lives <= 0) {
+        _showNoLivesDialog();
+        return false;
+      }
+
+      return true;
+    } catch (e) {
+      debugPrint("Error obteniendo vidas: $e");
+      return false;
     }
   }
 }

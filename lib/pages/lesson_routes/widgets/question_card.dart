@@ -1,6 +1,6 @@
-import 'package:LudiArtech/pages/lesson_routes/forms/word/widgets/Answers/drag_group_question_card.dart';
-import 'package:LudiArtech/pages/lesson_routes/forms/word/widgets/Answers/match_question_card.dart';
-import 'package:LudiArtech/pages/lesson_routes/forms/word/widgets/Answers/true_false_question_card.dart';
+import 'package:LudiArtech/pages/lesson_routes/widgets/Answers/drag_group_question_card.dart';
+import 'package:LudiArtech/pages/lesson_routes/widgets/Answers/match_question_card.dart';
+import 'package:LudiArtech/pages/lesson_routes/widgets/Answers/true_false_question_card.dart';
 import 'package:flutter/material.dart';
 
 import 'Answers/fill_blank_question_card.dart';

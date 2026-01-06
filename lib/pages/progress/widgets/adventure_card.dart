@@ -59,7 +59,7 @@ class AdventureCard extends StatelessWidget {
           SizedBox(height: h * 0.008 * scale),
 
           Text(
-            "Calificación ${rating.toStringAsFixed(1)}/10",
+            "Calificación $rating/10",
             style: TextStyle(
               fontSize: w * 0.045 * scale,
               fontWeight: FontWeight.w600,
@@ -81,7 +81,7 @@ class AdventureCard extends StatelessWidget {
                 ),
               ),
               Text(
-                "${progress.toStringAsFixed(0)}%",
+                "$progress%",
                 style: TextStyle(
                   fontSize: w * 0.040 * scale,
                   fontWeight: FontWeight.bold,

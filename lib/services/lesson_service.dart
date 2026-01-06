@@ -20,4 +20,20 @@ class LessonService {
         .map((e) => LessonStatusModel.fromJson(e))
         .toList();
   }
+  
+    Future<void> completeLesson({
+    required String token,
+    required int lessonId,
+    required double score,
+  }) async {
+    await api.postAuth(
+      ApiConstants.lessonComplete,
+      token: token,
+      body: {
+        "lessonId": lessonId,
+        "score": score,
+      },
+    );
+  }
+
 }
