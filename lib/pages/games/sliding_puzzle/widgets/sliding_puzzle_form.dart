@@ -253,7 +253,7 @@ class SlidingPuzzleFormState extends State<SlidingPuzzleForm> {
   void _showNoLivesDialog() {
     AppDialog.show(
       context: context,
-      title: "💀 Sin vidas",
+      title: "💔 Sin vidas",
       content: const Text(
         "Te quedaste sin vidas.\n\nDebes esperar 5 minutos para recuperar una vida.",
       ),

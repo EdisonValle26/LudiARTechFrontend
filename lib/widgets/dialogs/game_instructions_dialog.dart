@@ -7,6 +7,7 @@ class GameInstructionsDialog extends StatelessWidget {
   final String description;
   final List<String> instructions;
   final String finalMessage;
+  final Color backgroundColor;
 
   const GameInstructionsDialog({
     super.key,
@@ -15,6 +16,7 @@ class GameInstructionsDialog extends StatelessWidget {
     required this.description,
     required this.instructions,
     required this.finalMessage,
+    required this.backgroundColor,
   });
 
   @override
@@ -95,7 +97,7 @@ class GameInstructionsDialog extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 12),
                 child: Container(
                   decoration: BoxDecoration(
-                    color: Colors.blue,
+                    color: backgroundColor,
                     borderRadius: BorderRadius.circular(16),
                   ),
                   padding: const EdgeInsets.symmetric(
@@ -142,7 +144,7 @@ class GameInstructionsDialog extends StatelessWidget {
                 padding: const EdgeInsets.all(16),
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue,
+                    backgroundColor: backgroundColor,
                     padding: const EdgeInsets.symmetric(vertical: 14),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),

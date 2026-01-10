@@ -2,6 +2,7 @@ import 'package:LudiArtech/models/lesson_args.dart';
 import 'package:LudiArtech/pages/activityCenter/activity_center_screen.dart';
 import 'package:LudiArtech/pages/configuration/configuration_screen.dart';
 import 'package:LudiArtech/pages/forgetPassword/forget_password_screen.dart';
+import 'package:LudiArtech/pages/games/power_point_expert/power_point_expert_screen.dart';
 import 'package:LudiArtech/pages/games/sliding_puzzle/sliding_puzzle_screen.dart';
 import 'package:LudiArtech/pages/home/home_screen.dart';
 import 'package:LudiArtech/pages/learningPaths/learning_paths_screen.dart';
@@ -47,6 +48,7 @@ class AppRoutes {
   static const String slidingPuzzle = '/slidingPuzzle';
   static const String lesson = '/lesson';
   static const String lessonRoutes = '/lessonRoutes';
+  static const String powerPointExpert = '/powerPointExpert';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -99,8 +101,13 @@ class AppRoutes {
           settings: RouteSettings(arguments: args),
         );
       case lessonRoutes:
-      final args = settings.arguments as LessonArgs;
-        return MaterialPageRoute(builder: (_) => const LessonRoutesScreen(), settings: RouteSettings(arguments: args));
+        final args = settings.arguments as LessonArgs;
+        return MaterialPageRoute(
+            builder: (_) => const LessonRoutesScreen(),
+            settings: RouteSettings(arguments: args));
+      case powerPointExpert:
+        return MaterialPageRoute(
+            builder: (_) => const PowerPointExpertScreen());
       default:
         return MaterialPageRoute(
           builder: (_) => const Scaffold(

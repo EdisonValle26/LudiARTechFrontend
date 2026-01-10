@@ -36,6 +36,7 @@ class _SlidingPuzzleScreenState extends State<SlidingPuzzleScreen> {
       context: context,
       builder: (_) => const GameInstructionsDialog(
         imagePath: "TECH.png",
+        backgroundColor: Colors.blue,
         title: "¡Hola! soy TECH",
         description:
             "¡Arma el rompecabezas!\n\nRecuerda: dispones de 10 vidas en total. Cada vez que pierdas una, deberás esperar 5 minutos para que se recupere.",

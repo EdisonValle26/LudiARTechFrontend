@@ -1,7 +1,6 @@
 import 'package:LudiArtech/pages/activityCenter/widgets/activity_card.dart';
 import 'package:flutter/material.dart';
 
-
 class ExcelForm extends StatelessWidget {
   final double scale;
   const ExcelForm({super.key, required this.scale});
@@ -28,6 +27,7 @@ class ExcelForm extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
+          const SizedBox(height: 8),
           Text(
             "🏆 Desafío Excel del día",
             style: TextStyle(
@@ -43,8 +43,8 @@ class ExcelForm extends StatelessWidget {
                   ActivityCardWidget(
                     scale: scale,
                     leftSquareColor: Colors.greenAccent.shade100,
-                    title: "Ejemplo (Kahoot sobre tal tema)",
-                    subtitle: "Resuelve la actividad en menos de 5 minutos",
+                    title: "Empareja las cartas: Tablas dinámicas en Excel",
+                    subtitle: "Empareja las cartas usando 6 aciertos",
                     leftValue: "85%",
                     leftCaption: "Completado",
                     rightValue: "8/10",
@@ -59,8 +59,8 @@ class ExcelForm extends StatelessWidget {
                   ActivityCardWidget(
                     scale: scale,
                     leftSquareColor: Colors.purpleAccent.shade100,
-                    title: "Ejemplo (Rompecabeza sobre tal tema)",
-                    subtitle: "Resuelve la actividad en menos de 5 minutos",
+                    title: "Clasificador de tipos de datos: Microsoft Excel",
+                    subtitle: "Adivina la palabra usando hasta 6 aciertos.",
                     leftValue: "100%",
                     leftCaption: "Completado",
                     rightValue: "3:45",
@@ -69,22 +69,6 @@ class ExcelForm extends StatelessWidget {
                     leftButtonText: "Ver resultados",
                     onLeftTap: () {},
                     rightButtonIcon: Icons.restore,
-                    rightButtonText: "Repetir",
-                    onRightTap: () {},
-                  ),
-                  ActivityCardWidget(
-                    scale: scale,
-                    leftSquareColor: Colors.orangeAccent.shade100,
-                    title: "Ejemplo (Quiz sobre tal tema)",
-                    subtitle: "Resuelve la actividad en menos de 5 minutos",
-                    leftValue: "50%",
-                    leftCaption: "Completado",
-                    rightValue: "5/10",
-                    rightCaption: "Calificaciones",
-                    leftButtonIcon: Icons.assessment,
-                    leftButtonText: "Ver resultados",
-                    onLeftTap: () {},
-                    rightButtonIcon: Icons.refresh,
                     rightButtonText: "Repetir",
                     onRightTap: () {},
                   ),

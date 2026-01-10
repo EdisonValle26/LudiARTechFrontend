@@ -29,6 +29,7 @@ class WordForm extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
+          const SizedBox(height: 8),
           Text(
             "🏆 Desafío Word del día",
             style: TextStyle(
@@ -44,8 +45,8 @@ class WordForm extends StatelessWidget {
                   ActivityCardWidget(
                     scale: scale,
                     leftSquareColor: Colors.greenAccent.shade100,
-                    title: "Ejemplo (Kahoot sobre tal tema)",
-                    subtitle: "Resuelve la actividad en menos de 5 minutos",
+                    title: "Rompecabeza: Pasos para insertar una imágen",
+                    subtitle: "Resuelve la actividad en menos de 3 minutos",
                     leftValue: "85%",
                     leftCaption: "Completado",
                     rightValue: "8/10",
@@ -62,8 +63,8 @@ class WordForm extends StatelessWidget {
                   ActivityCardWidget(
                     scale: scale,
                     leftSquareColor: Colors.purpleAccent.shade100,
-                    title: "Ejemplo (Rompecabeza sobre tal tema)",
-                    subtitle: "Resuelve la actividad en menos de 5 minutos",
+                    title: "Construye el robot: Procesador de palabras de Word",
+                    subtitle: "Adivina la palabra usando hasta 6 aciertos",
                     leftValue: "100%",
                     leftCaption: "Completado",
                     rightValue: "3:45",
@@ -72,22 +73,6 @@ class WordForm extends StatelessWidget {
                     leftButtonText: "Ver resultados",
                     onLeftTap: () {},
                     rightButtonIcon: Icons.restore,
-                    rightButtonText: "Repetir",
-                    onRightTap: () {},
-                  ),
-                  ActivityCardWidget(
-                    scale: scale,
-                    leftSquareColor: Colors.orangeAccent.shade100,
-                    title: "Ejemplo (Quiz sobre tal tema)",
-                    subtitle: "Resuelve la actividad en menos de 5 minutos",
-                    leftValue: "50%",
-                    leftCaption: "Completado",
-                    rightValue: "5/10",
-                    rightCaption: "Calificaciones",
-                    leftButtonIcon: Icons.assessment,
-                    leftButtonText: "Ver resultados",
-                    onLeftTap: () {},
-                    rightButtonIcon: Icons.refresh,
                     rightButtonText: "Repetir",
                     onRightTap: () {},
                   ),

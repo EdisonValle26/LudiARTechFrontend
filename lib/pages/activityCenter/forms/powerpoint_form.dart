@@ -1,6 +1,6 @@
 import 'package:LudiArtech/pages/activityCenter/widgets/activity_card.dart';
+import 'package:LudiArtech/routes/app_routes.dart';
 import 'package:flutter/material.dart';
-
 
 class PowerPointForm extends StatelessWidget {
   final double scale;
@@ -28,6 +28,7 @@ class PowerPointForm extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
+          const SizedBox(height: 8),
           Text(
             "🏆 Desafío del PP día",
             style: TextStyle(
@@ -43,7 +44,7 @@ class PowerPointForm extends StatelessWidget {
                   ActivityCardWidget(
                     scale: scale,
                     leftSquareColor: Colors.greenAccent.shade100,
-                    title: "Ejemplo (Kahoot sobre tal tema)",
+                    title: "Experto en PowerPoint",
                     subtitle: "Resuelve la actividad en menos de 5 minutos",
                     leftValue: "85%",
                     leftCaption: "Completado",
@@ -51,7 +52,10 @@ class PowerPointForm extends StatelessWidget {
                     rightCaption: "Actividades",
                     leftButtonIcon: Icons.assignment,
                     leftButtonText: "Continuar",
-                    onLeftTap: () {},
+                    onLeftTap: () {
+                      Navigator.pushNamed(context, AppRoutes.powerPointExpert);
+                    },
+                    
                     rightButtonIcon: Icons.restart_alt,
                     rightButtonText: "Reiniciar",
                     onRightTap: () {},
@@ -59,8 +63,8 @@ class PowerPointForm extends StatelessWidget {
                   ActivityCardWidget(
                     scale: scale,
                     leftSquareColor: Colors.purpleAccent.shade100,
-                    title: "Ejemplo (Rompecabeza sobre tal tema)",
-                    subtitle: "Resuelve la actividad en menos de 5 minutos",
+                    title: "Elementos de diapositivas",
+                    subtitle: "Empareja las cartas usando 4 aciertos",
                     leftValue: "100%",
                     leftCaption: "Completado",
                     rightValue: "3:45",
@@ -69,22 +73,6 @@ class PowerPointForm extends StatelessWidget {
                     leftButtonText: "Ver resultados",
                     onLeftTap: () {},
                     rightButtonIcon: Icons.restore,
-                    rightButtonText: "Repetir",
-                    onRightTap: () {},
-                  ),
-                  ActivityCardWidget(
-                    scale: scale,
-                    leftSquareColor: Colors.orangeAccent.shade100,
-                    title: "Ejemplo (Quiz sobre tal tema)",
-                    subtitle: "Resuelve la actividad en menos de 5 minutos",
-                    leftValue: "50%",
-                    leftCaption: "Completado",
-                    rightValue: "5/10",
-                    rightCaption: "Calificaciones",
-                    leftButtonIcon: Icons.assessment,
-                    leftButtonText: "Ver resultados",
-                    onLeftTap: () {},
-                    rightButtonIcon: Icons.refresh,
                     rightButtonText: "Repetir",
                     onRightTap: () {},
                   ),
