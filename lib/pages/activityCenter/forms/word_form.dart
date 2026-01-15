@@ -71,7 +71,9 @@ class WordForm extends StatelessWidget {
                     rightCaption: "Mejor Tiempo",
                     leftButtonIcon: Icons.assessment,
                     leftButtonText: "Ver resultados",
-                    onLeftTap: () {},
+                    onLeftTap: () {
+                      Navigator.pushNamed(context, AppRoutes.robotBuilder);
+                    },
                     rightButtonIcon: Icons.restore,
                     rightButtonText: "Repetir",
                     onRightTap: () {},

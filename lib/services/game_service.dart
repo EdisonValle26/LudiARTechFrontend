@@ -50,4 +50,26 @@ class GameResultService {
 
     return GameResultResponse.fromJson(response);
   }
+
+  Future<GameResultResponse> sendResultMomoryPairs({
+    required String token,
+    required int gameId,
+    required String status,
+    required int usedErrors,
+    required int totalErrors,
+  }) async {
+    final response = await api.postAuth(
+      '${ApiConstants.games}/$gameId/result',
+      token: token,
+      body: {
+        "status": status,
+        "errors": {
+          "used": usedErrors,
+          "total": totalErrors,
+        }
+      },
+    );
+
+    return GameResultResponse.fromJson(response);
+  }
 }

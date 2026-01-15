@@ -37,7 +37,7 @@ class SlidingPuzzleFormState extends State<SlidingPuzzleForm> {
   bool _resultSent = false;
 
   int remainingMoves = 100;
-  int remainingSeconds = 180;
+  int remainingSeconds = 300;
 
   Timer? _timer;
 
@@ -57,7 +57,7 @@ class SlidingPuzzleFormState extends State<SlidingPuzzleForm> {
     _timer?.cancel();
     gameStarted = false;
     remainingMoves = 100;
-    remainingSeconds = 180;
+    remainingSeconds = 300;
     _resultSent = false;
 
     tiles = [
@@ -326,7 +326,7 @@ class SlidingPuzzleFormState extends State<SlidingPuzzleForm> {
     if (token == null) return null;
 
     final usedMoves = 100 - remainingMoves;
-    final usedTime = 180 - remainingSeconds;
+    final usedTime = 300 - remainingSeconds;
 
     try {
       final result = await _gameResultService.sendResult(
@@ -336,7 +336,7 @@ class SlidingPuzzleFormState extends State<SlidingPuzzleForm> {
         usedMoves: usedMoves,
         totalMoves: 100,
         usedTime: usedTime,
-        totalTime: 180,
+        totalTime: 300,
       );
 
       _lastScore = result.score;

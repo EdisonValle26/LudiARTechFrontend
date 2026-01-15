@@ -1,4 +1,5 @@
 import 'package:LudiArtech/pages/activityCenter/widgets/activity_card.dart';
+import 'package:LudiArtech/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 
 class ExcelForm extends StatelessWidget {
@@ -51,7 +52,9 @@ class ExcelForm extends StatelessWidget {
                     rightCaption: "Actividades",
                     leftButtonIcon: Icons.assignment,
                     leftButtonText: "Continuar",
-                    onLeftTap: () {},
+                    onLeftTap: () {
+                      Navigator.pushNamed(context, AppRoutes.memoryPairs);
+                    },
                     rightButtonIcon: Icons.restart_alt,
                     rightButtonText: "Reiniciar",
                     onRightTap: () {},

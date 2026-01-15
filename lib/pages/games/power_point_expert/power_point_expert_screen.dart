@@ -42,7 +42,7 @@ class _PowerPointExpertScreenState extends State<PowerPointExpertScreen> {
           "Toca primero la etiqueta correcta que aparece en la parte inferior.",
           "Luego, arrastrala lugar exacto donde se encuentra esa parte dentro de la interfaz de PowerPoint.",
           "Cada acierto te permitirá avanzar en el juego.",
-          "Si te equivocas, deberás interntar nuevamente.",
+          "Si te equivocas más de 5 veces, de deberás intentar nuevamente.",
           "Dispondrás de 5 minutos para finalizar el juego."
         ],
         finalMessage: "¡Completa el juego en el menor tiempo posible!",

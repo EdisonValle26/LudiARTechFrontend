@@ -1,8 +1,6 @@
 import 'package:LudiArtech/services/token_storage.dart';
 import 'package:flutter/material.dart';
 
-import 'notification_icon.dart';
-
 class HomeHeader extends StatelessWidget {
   final double scale;
   const HomeHeader({super.key, required this.scale});
@@ -39,10 +37,10 @@ class HomeHeader extends StatelessWidget {
                         ),
                       ),
                     ),
-                    NotificationIcon(
-                      size: width * 0.070 * scale,
-                      padding: width * 0.026,
-                    ),
+                    // NotificationIcon(
+                    //   size: width * 0.070 * scale,
+                    //   padding: width * 0.026,
+                    // ),
                   ],
                 ),
                 SizedBox(height: width * 0.001 * scale),

@@ -44,6 +44,7 @@ class PowerPointExpertFormState extends State<PowerPointExpertForm> {
 
   int? _lastScore;
   bool? _streakGained;
+  bool _timerStarted = false;
 
   List<String> get leftOptions {
     final half = (options.length / 2).ceil();
@@ -84,6 +85,13 @@ class PowerPointExpertFormState extends State<PowerPointExpertForm> {
 
   final Map<int, String?> placements = {};
 
+  void _startTimerIfNeeded() {
+    if (_timerStarted) return;
+
+    _timerStarted = true;
+    _startTimer();
+  }
+
   void _verifyAnswers() async {
     if (_verificationInProgress) return;
     _verificationInProgress = true;
@@ -121,7 +129,7 @@ class PowerPointExpertFormState extends State<PowerPointExpertForm> {
         "Perdiste por cometer más de $maxErrors errores.",
       );
     } else {
-      final result = await _sendGameResult("WIN");
+      await _sendGameResult("WIN");
       _showWinDialog();
     }
 
@@ -136,7 +144,6 @@ class PowerPointExpertFormState extends State<PowerPointExpertForm> {
   @override
   void initState() {
     super.initState();
-    _startTimer();
   }
 
   @override
@@ -198,37 +205,6 @@ class PowerPointExpertFormState extends State<PowerPointExpertForm> {
     }
   }
 
-  void _showWinDialogTemporary() {
-    AppDialog.show(
-      context: context,
-      title: "🎉 ¡Felicidades!",
-      content: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const Text("Respondiste todo correctamente."),
-          const SizedBox(height: 8),
-          Text("⏱ Tiempo : ${_formatTime()}"),
-          const SizedBox(height: 8),
-          const Text("🏆 Puntaje obtenido: 0"),
-          const SizedBox(height: 8),
-          const Text("🔥 ¡Ganaste +1 racha!"),
-        ],
-      ),
-      buttons: [
-        DialogButton(
-          text: "Volver",
-          isPrimary: true,
-          onPressed: () {
-            Navigator.pop(context);
-            widget.onExitGame?.call();
-            Navigator.pushNamed(context, AppRoutes.activityCenter);
-          },
-        ),
-      ],
-    );
-  }
-
   void _showWinDialog() {
     AppDialog.show(
       context: context,
@@ -257,8 +233,13 @@ class PowerPointExpertFormState extends State<PowerPointExpertForm> {
             Navigator.pop(context);
             setState(() {
               placements.clear();
+              usedOptions.clear();
+              verificationResults.clear();
+              isVerified = false;
               _resultSent = false;
-              _startTimer();
+              _timer?.cancel();
+              _timerStarted = false;
+              remainingSeconds = 300;
             });
           },
         ),
@@ -377,6 +358,8 @@ class PowerPointExpertFormState extends State<PowerPointExpertForm> {
     // validar vidas ANTES de permitir jugar
     final canPlay = await _checkLives();
     if (!canPlay) return;
+
+    _startTimerIfNeeded();
 
     // Si ya hay algo colocado, no permitir
     if (placements[index] != null) return;
@@ -562,8 +545,8 @@ class PowerPointExpertFormState extends State<PowerPointExpertForm> {
                   ),
                 ),
                 Positioned(
-                  left: 172,
-                  top: 155,
+                  left: 175,
+                  top: 156,
                   child: ColoredDropBox(
                     index: 4,
                     color: rectColors[4],
@@ -650,7 +633,7 @@ class PowerPointExpertFormState extends State<PowerPointExpertForm> {
                   ),
                 ),
                 Positioned(
-                  left: 230,
+                  left: 233,
                   top: 153,
                   child: ColoredDropBox(
                     index: 8,
@@ -673,7 +656,7 @@ class PowerPointExpertFormState extends State<PowerPointExpertForm> {
                 ),
                 Positioned(
                   right: 0,
-                  top: 158,
+                  top: 156,
                   child: ColoredDropBox(
                     index: 9,
                     color: rectColors[9],
