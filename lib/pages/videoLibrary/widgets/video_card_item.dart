@@ -26,22 +26,26 @@ class VideoCardItem extends StatelessWidget {
             color: Colors.black.withOpacity(0.1),
             blurRadius: 6,
             offset: const Offset(0, 3),
-          )
+          ),
         ],
       ),
       child: Column(
         children: [
-          Container(
-            height: width * 0.40 * scale,
-            width: double.infinity,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.vertical(
-                top: Radius.circular(20 * scale),
+          ClipRRect(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20 * scale)),
+            child: Container(
+              height: width * 0.45 * scale,
+              width: double.infinity,
+              color: Colors.grey.shade200,
+              child: FittedBox(
+                fit: BoxFit.cover,
+                child: SizedBox(
+                  width: width,
+                  height: width * 0.60 * scale,
+                  child: video,
+                ),
               ),
-              color: Colors.white,
             ),
-            clipBehavior: Clip.hardEdge,
-            child: video,
           ),
 
           Padding(

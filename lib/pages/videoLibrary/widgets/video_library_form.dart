@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../widgets/firebase_video_player.dart';
 import 'video_card_item.dart';
-
 class VideoLibraryForm extends StatelessWidget {
   final double scale;
   const VideoLibraryForm({super.key, required this.scale});
@@ -56,44 +56,50 @@ class VideoLibraryForm extends StatelessWidget {
                 children: [
                   VideoCardItem(
                     scale: scale,
-                    title: "Tema 1 – Word",
-                    video: Container(
-                      color: Colors.lightBlue.shade100,
-                      child: const Center(
-                        child: Icon(
-                          Icons.play_circle,
-                          color: Colors.blue,
-                          size: 55,
-                        ),
-                      ),
+                    title: "Procesador Microsoft Word",
+                    video: const FirebaseVideoPlayer(
+                      path: "Procesador_MW.mp4",
+                      placeholderColor: Colors.lightBlueAccent,
                     ),
                   ),
                   VideoCardItem(
                     scale: scale,
-                    title: "Tema 2 – Excel",
-                    video: Container(
-                      color: Colors.deepOrange.shade100,
-                      child: const Center(
-                        child: Icon(
-                          Icons.play_circle,
-                          color: Colors.blue,
-                          size: 55,
-                        ),
-                      ),
+                    title: "Proceso de inserción de imagenes en Microsoft Word",
+                    video: const FirebaseVideoPlayer(
+                      path: "Insercion_imagenes_MW.mp4",
+                      placeholderColor: Colors.deepOrangeAccent,
                     ),
                   ),
                   VideoCardItem(
                     scale: scale,
-                    title: "Tema 3 – Power Point",
-                    video: Container(
-                      color: Colors.lightGreen.shade100,
-                      child: const Center(
-                        child: Icon(
-                          Icons.play_circle,
-                          color: Colors.blue,
-                          size: 55,
-                        ),
-                      ),
+                    title: "Tablas Dinámicas",
+                    video: const FirebaseVideoPlayer(
+                      path: "Tablas_dinamicas.mp4",
+                      placeholderColor: Colors.lightGreen,
+                    ),
+                  ),
+                  VideoCardItem(
+                    scale: scale,
+                    title: "Tipos de Datos",
+                    video: const FirebaseVideoPlayer(
+                      path: "Tipos_datos.mp4",
+                      placeholderColor: Colors.redAccent,
+                    ),
+                  ),
+                  VideoCardItem(
+                    scale: scale,
+                    title: "Elementos de una diapositiva",
+                    video: const FirebaseVideoPlayer(
+                      path: "Elementos_diapositiva.mp4",
+                      placeholderColor: Colors.yellowAccent,
+                    ),
+                  ),
+                  VideoCardItem(
+                    scale: scale,
+                    title: "Interfaz Power Point",
+                    video: const FirebaseVideoPlayer(
+                      path: "Interfaz_PP.mp4",
+                      placeholderColor: Colors.purpleAccent,
                     ),
                   ),
                   SizedBox(height: sectionSpacing),
