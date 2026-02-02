@@ -4,7 +4,9 @@ import 'package:LudiArtech/pages/configuration/configuration_screen.dart';
 import 'package:LudiArtech/pages/forgetPassword/forget_password_screen.dart';
 import 'package:LudiArtech/pages/games/MemoryPairs/memory_pairs_screen.dart';
 import 'package:LudiArtech/pages/games/RobotBuilder/robot_builder_screen.dart';
+import 'package:LudiArtech/pages/games/data_type_classifier/data_type_classifier_screen.dart';
 import 'package:LudiArtech/pages/games/power_point_expert/power_point_expert_screen.dart';
+import 'package:LudiArtech/pages/games/slide_elements/slide_elements_screen.dart';
 import 'package:LudiArtech/pages/games/sliding_puzzle/sliding_puzzle_screen.dart';
 import 'package:LudiArtech/pages/home/home_screen.dart';
 import 'package:LudiArtech/pages/learningPaths/learning_paths_screen.dart';
@@ -53,6 +55,8 @@ class AppRoutes {
   static const String powerPointExpert = '/powerPointExpert';
   static const String memoryPairs = '/memoryPairs';
   static const String robotBuilder = '/robotBuilder';
+  static const String dataTypeClassifier = '/dataTypeClassifier';
+  static const String slideElements = '/slideElements';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -99,7 +103,6 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => const SlidingPuzzleScreen());
       case lesson:
         final args = settings.arguments as LessonArgs;
-
         return MaterialPageRoute(
           builder: (_) => const LessonScreen(),
           settings: RouteSettings(arguments: args),
@@ -113,11 +116,13 @@ class AppRoutes {
         return MaterialPageRoute(
             builder: (_) => const PowerPointExpertScreen());
       case memoryPairs:
-        return MaterialPageRoute(
-            builder: (_) => const MemoryPairsScreen());
+        return MaterialPageRoute(builder: (_) => const MemoryPairsScreen());
       case robotBuilder:
-        return MaterialPageRoute(
-            builder: (_) => const RobotBuilderScreen());
+        return MaterialPageRoute(builder: (_) => const RobotBuilderScreen());
+      case dataTypeClassifier:
+        return MaterialPageRoute(builder: (_) => const DataTypeClassifierScreen());
+      case slideElements:
+        return MaterialPageRoute(builder: (_) => const SlideElementsScreen());
       default:
         return MaterialPageRoute(
           builder: (_) => const Scaffold(

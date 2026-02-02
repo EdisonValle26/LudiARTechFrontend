@@ -67,25 +67,6 @@ class _ExcelFormState extends State<ExcelForm> {
       ]
     },
     {
-      "type": "order",
-      "question":
-          "2. Ordena los pasos correctos para insertar una imagen desde tu computadora:",
-      "options": [
-        "Navegar y seleccionar la imagen",
-        "Ir a la pestaña Insertar",
-        "Seleccionar las opción Imágenes",
-        "Clic en el botón Insertar",
-        "Colocar el cursor donde deseas la imagen"
-      ],
-      "orderCorrect": [
-        "Colocar el cursor donde deseas la imagen",
-        "Ir a la pestaña insertar",
-        "Seleccionar las opción Imágenes",
-        "Navegar y seleccionar la imagen",
-        "Clic en el botón Insertar"
-      ],
-    },
-    {
       "type": "fill",
       "question":
           "3. Completa la siguiente información sobre los pasos para insertar una Tabla Dinámica:",

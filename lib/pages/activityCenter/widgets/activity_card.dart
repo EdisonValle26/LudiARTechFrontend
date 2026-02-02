@@ -7,18 +7,18 @@ class ActivityCardWidget extends StatelessWidget {
   final String title;
   final String subtitle;
 
-  final String leftValue;
-  final String leftCaption;
-  final String rightValue;
-  final String rightCaption;
+  // final String leftValue;
+  // final String leftCaption;
+  // final String rightValue;
+  // final String rightCaption;
 
   final IconData leftButtonIcon;
   final String leftButtonText;
   final void Function()? onLeftTap;
 
-  final IconData rightButtonIcon;
-  final String rightButtonText;
-  final void Function()? onRightTap;
+  // final IconData rightButtonIcon;
+  // final String rightButtonText;
+  // final void Function()? onRightTap;
 
   const ActivityCardWidget({
     super.key,
@@ -26,16 +26,16 @@ class ActivityCardWidget extends StatelessWidget {
     required this.leftSquareColor,
     required this.title,
     required this.subtitle,
-    required this.leftValue,
-    required this.leftCaption,
-    required this.rightValue,
-    required this.rightCaption,
+    // required this.leftValue,
+    // required this.leftCaption,
+    // required this.rightValue,
+    // required this.rightCaption,
     required this.leftButtonIcon,
     required this.leftButtonText,
     required this.onLeftTap,
-    required this.rightButtonIcon,
-    required this.rightButtonText,
-    required this.onRightTap,
+    // required this.rightButtonIcon,
+    // required this.rightButtonText,
+    // required this.onRightTap,
   });
 
   @override
@@ -107,53 +107,53 @@ class ActivityCardWidget extends StatelessWidget {
 
           SizedBox(height: w * 0.06),
 
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Column(
-                children: [
-                  Text(
-                    leftValue,
-                    style: TextStyle(
-                      color: const Color(0xFFBA44FF),
-                      fontSize: w * 0.07 * scale,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  SizedBox(height: 4),
-                  Text(
-                    leftCaption,
-                    style: TextStyle(
-                      color: Colors.grey[600],
-                      fontSize: w * 0.035 * scale,
-                    ),
-                  ),
-                ],
-              ),
-              Column(
-                children: [
-                  Text(
-                    rightValue,
-                    style: TextStyle(
-                      color: const Color(0xFFBA44FF),
-                      fontSize: w * 0.07 * scale,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  SizedBox(height: 4),
-                  Text(
-                    rightCaption,
-                    style: TextStyle(
-                      color: Colors.grey[600],
-                      fontSize: w * 0.035 * scale,
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.spaceAround,
+          //   children: [
+          //     Column(
+          //       children: [
+          //         Text(
+          //           leftValue,
+          //           style: TextStyle(
+          //             color: const Color(0xFFBA44FF),
+          //             fontSize: w * 0.07 * scale,
+          //             fontWeight: FontWeight.bold,
+          //           ),
+          //         ),
+          //         SizedBox(height: 4),
+          //         Text(
+          //           leftCaption,
+          //           style: TextStyle(
+          //             color: Colors.grey[600],
+          //             fontSize: w * 0.035 * scale,
+          //           ),
+          //         ),
+          //       ],
+          //     ),
+          //     Column(
+          //       children: [
+          //         Text(
+          //           rightValue,
+          //           style: TextStyle(
+          //             color: const Color(0xFFBA44FF),
+          //             fontSize: w * 0.07 * scale,
+          //             fontWeight: FontWeight.bold,
+          //           ),
+          //         ),
+          //         SizedBox(height: 4),
+          //         Text(
+          //           rightCaption,
+          //           style: TextStyle(
+          //             color: Colors.grey[600],
+          //             fontSize: w * 0.035 * scale,
+          //           ),
+          //         ),
+          //       ],
+          //     ),
+          //   ],
+          // ),
 
-          SizedBox(height: w * 0.05 * scale),
+          // SizedBox(height: w * 0.05 * scale),
 
           Row(
             children: [
@@ -183,33 +183,33 @@ class ActivityCardWidget extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(width: w * 0.03),
-              Expanded(
-                child: ElevatedButton.icon(
-                  onPressed: onRightTap,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.grey[300],
-                    foregroundColor: Colors.black87,
-                    padding: EdgeInsets.symmetric(
-                      vertical: 10 * buttonScale,
-                      horizontal: 6 * buttonScale,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                  icon: Icon(
-                    rightButtonIcon,
-                    size: 18 * buttonScale,
-                  ),
-                  label: FittedBox(
-                    child: Text(
-                      rightButtonText,
-                      style: TextStyle(fontSize: 14 * buttonScale),
-                    ),
-                  ),
-                ),
-              ),
+              // SizedBox(width: w * 0.03),
+              // Expanded(
+              //   child: ElevatedButton.icon(
+              //     onPressed: onRightTap,
+              //     style: ElevatedButton.styleFrom(
+              //       backgroundColor: Colors.grey[300],
+              //       foregroundColor: Colors.black87,
+              //       padding: EdgeInsets.symmetric(
+              //         vertical: 10 * buttonScale,
+              //         horizontal: 6 * buttonScale,
+              //       ),
+              //       shape: RoundedRectangleBorder(
+              //         borderRadius: BorderRadius.circular(12),
+              //       ),
+              //     ),
+              //     icon: Icon(
+              //       rightButtonIcon,
+              //       size: 18 * buttonScale,
+              //     ),
+              //     label: FittedBox(
+              //       child: Text(
+              //         rightButtonText,
+              //         style: TextStyle(fontSize: 14 * buttonScale),
+              //       ),
+              //     ),
+              //   ),
+              // ),
             ],
           ),
         ],

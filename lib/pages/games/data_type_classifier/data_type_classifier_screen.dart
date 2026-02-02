@@ -2,19 +2,19 @@ import 'package:LudiArtech/widgets/background.dart';
 import 'package:LudiArtech/widgets/dialogs/game_instructions_dialog.dart';
 import 'package:flutter/material.dart';
 
-import 'widgets/sliding_puzzle_form.dart';
-import 'widgets/sliding_puzzle_header.dart';
+import 'widgets/data_type_classifier_form.dart';
+import 'widgets/data_type_classifier_header.dart';
 
-class SlidingPuzzleScreen extends StatefulWidget {
-  const SlidingPuzzleScreen({super.key});
+class DataTypeClassifierScreen extends StatefulWidget {
+  const DataTypeClassifierScreen({super.key});
 
   @override
-  State<SlidingPuzzleScreen> createState() => _SlidingPuzzleScreenState();
+  State<DataTypeClassifierScreen> createState() => _DataTypeClassifierScreenState();
 }
 
-class _SlidingPuzzleScreenState extends State<SlidingPuzzleScreen> {
-  final GlobalKey<SlidingPuzzleFormState> puzzleKey =
-      GlobalKey<SlidingPuzzleFormState>();
+class _DataTypeClassifierScreenState extends State<DataTypeClassifierScreen> {
+  final GlobalKey<DataTypeClassifierFormState> puzzleKey =
+      GlobalKey<DataTypeClassifierFormState>();
 
   bool _dialogShown = false;
 
@@ -36,18 +36,15 @@ class _SlidingPuzzleScreenState extends State<SlidingPuzzleScreen> {
       context: context,
       builder: (_) => const GameInstructionsDialog(
         imagePath: "TECH.png",
-        backgroundColor: Colors.blue,
+        backgroundColor: Color.fromARGB(255, 144, 107, 209),
         title: "¡Hola! soy TECH",
         description:
-            "¡Arma el rompecabezas!\n\nRecuerda: dispones de 10 vidas en total. Cada vez que pierdas una, deberás esperar 5 minutos para que se recupere.",
+            "¡Clasifica los datos de manera correcta!\n\nRecuerda: dispones de 10 vidas en total. Cada vez que pierdas una, deberás esperar 5 minutos para que se recupere.",
         instructions: [
-          "Observa la imagen desordenada de los pasos para insertar una imagen.",
-          "Haz clic en las piezas adyacentes al espacio vacío para moverlas.",
-          "Desliza las piezas hasta que todas estén en su lugar correcto.",
-          "Tienes 5 minutos para completar el rompecabezas; si se agota el tiempo, perderás 1 vida.",
-          "Dispones de 100 movimientos; si superas este límite, perderás 1 vida."
-        ],
-        finalMessage: "¡Completa el rompecabezas en el menor tiempo posible!",
+          "Clasifica datos según su tipo en Excel.",
+          "Arrastra cada dato a su categoría correcta:\nNÚMERO (valores)\nTEXTO (palabras)\nFECHA Y HORA",
+          "Dispones de 3 minutos para completar la actividad; si no lo logras, perderás una vida."       ],
+        finalMessage: "¡Clasifica los datos de manera correcta en el menor tiempo posible!",
       ),
     ).then((_) {
       _dialogShown = false;
@@ -66,7 +63,7 @@ class _SlidingPuzzleScreenState extends State<SlidingPuzzleScreen> {
             const AppBackground(child: SizedBox()),
             Column(
               children: [
-                SlidingPuzzleHeader(
+                DataTypeClassifierHeader(
                   scale: scale,
                   onExitConfirmed: () {
                     puzzleKey.currentState?.exitGameAsLose();
@@ -74,7 +71,7 @@ class _SlidingPuzzleScreenState extends State<SlidingPuzzleScreen> {
                   onInfoPressed: _showInfoModal,
                 ),
                 Expanded(
-                  child: SlidingPuzzleForm(
+                  child: DataTypeClassifierForm(
                     key: puzzleKey,
                     scale: scale,
                   ),

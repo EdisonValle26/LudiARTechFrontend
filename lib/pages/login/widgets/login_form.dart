@@ -4,7 +4,6 @@ import 'package:LudiArtech/services/auth_service.dart';
 import 'package:LudiArtech/services/token_storage.dart';
 import 'package:LudiArtech/utils/api_constants.dart';
 import 'package:LudiArtech/widgets/banner_notification.dart';
-import 'package:LudiArtech/widgets/firebase_image.dart';
 import 'package:flutter/material.dart';
 
 class LoginForm extends StatefulWidget {
@@ -202,7 +201,7 @@ class _LoginFormState extends State<LoginForm> {
                       foregroundColor: const Color(0xFFBA44FF),
                       padding: buttonPadding,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(12)
                       ),
                       elevation: 4,
                     ),
@@ -219,45 +218,6 @@ class _LoginFormState extends State<LoginForm> {
                   ),
                 ),
                 SizedBox(height: sectionSpacing),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Expanded(
-                      child: Divider(
-                        color: Color(0xFF464646),
-                        thickness: 1,
-                        endIndent: 10,
-                      ),
-                    ),
-                    Text(
-                      'Iniciar con',
-                      style: TextStyle(
-                        fontSize: width * 0.04,
-                        color: const Color(0xFF464646),
-                        letterSpacing: 1.2,
-                      ),
-                    ),
-                    const Expanded(
-                      child: Divider(
-                        color: Color(0xFF464646),
-                        thickness: 1,
-                        indent: 10,
-                      ),
-                    ),
-                  ],
-                ),
-                Padding(
-                  padding: EdgeInsets.only(
-                    bottom: height * 0.01,
-                    top: height * 0.025,
-                  ),
-                  child: FirebaseImage(
-                    path: "Icono_google.png",
-                    width: width * 0.15,
-                    fit: BoxFit.contain,
-                  ),
-                ),
-                SizedBox(height: height * 0.02),
               ],
             ),
           ),

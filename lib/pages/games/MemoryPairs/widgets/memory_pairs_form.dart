@@ -218,7 +218,7 @@ class MemoryPairsFormState extends State<MemoryPairsForm> {
     if (token == null) return null;
 
     try {
-      final result = await _gameResultService.sendResultMomoryPairs(
+      final result = await _gameResultService.sendResultOnlyErrors(
         token: token,
         gameId: 3,
         status: status,

@@ -3,7 +3,6 @@ import 'package:LudiArtech/services/api_service.dart';
 import 'package:LudiArtech/services/auth_service.dart';
 import 'package:LudiArtech/utils/api_constants.dart';
 import 'package:LudiArtech/widgets/banner_notification.dart';
-import 'package:LudiArtech/widgets/firebase_image.dart';
 import 'package:flutter/material.dart';
 
 class RegisterForm extends StatefulWidget {
@@ -191,45 +190,6 @@ class _RegisterFormState extends State<RegisterForm> {
                   ),
                 ),
                 SizedBox(height: sectionSpacing),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Expanded(
-                      child: Divider(
-                        color: Color(0xFF464646),
-                        thickness: 1,
-                        endIndent: 10,
-                      ),
-                    ),
-                    Text(
-                      'Continuar con',
-                      style: TextStyle(
-                        fontSize: width * 0.04,
-                        color: const Color(0xFF464646),
-                        letterSpacing: 1.2,
-                      ),
-                    ),
-                    const Expanded(
-                      child: Divider(
-                        color: Color(0xFF464646),
-                        thickness: 1,
-                        indent: 10,
-                      ),
-                    ),
-                  ],
-                ),
-                Padding(
-                  padding: EdgeInsets.only(
-                    bottom: height * 0.01,
-                    top: height * 0.025,
-                  ),
-                  child: FirebaseImage(
-                    path: "Icono_google.png",
-                    width: width * 0.15,
-                    fit: BoxFit.contain,
-                  ),
-                ),
-                SizedBox(height: height * 0.02),
               ],
             ),
           ),

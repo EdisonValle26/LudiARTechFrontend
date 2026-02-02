@@ -51,7 +51,7 @@ class GameResultService {
     return GameResultResponse.fromJson(response);
   }
 
-  Future<GameResultResponse> sendResultMomoryPairs({
+  Future<GameResultResponse> sendResultOnlyErrors({
     required String token,
     required int gameId,
     required String status,
@@ -67,6 +67,56 @@ class GameResultService {
           "used": usedErrors,
           "total": totalErrors,
         }
+      },
+    );
+
+    return GameResultResponse.fromJson(response);
+  }
+
+  Future<GameResultResponse> sendResultTime({
+    required String token,
+    required int gameId,
+    required String status,
+    required int usedTime,
+    required int totalTime,
+  }) async {
+    final response = await api.postAuth(
+      '${ApiConstants.games}/$gameId/result',
+      token: token,
+      body: {
+        "status": status,
+        "time": {
+          "used": usedTime,
+          "total": totalTime,
+        },
+      },
+    );
+
+    return GameResultResponse.fromJson(response);
+  }
+
+    Future<GameResultResponse> sendResultTimeAndError({
+    required String token,
+    required int gameId,
+    required String status,
+    required int usedErrors,
+    required int totalErrors,
+    required int usedTime,
+    required int totalTime,
+  }) async {
+    final response = await api.postAuth(
+      '${ApiConstants.games}/$gameId/result',
+      token: token,
+      body: {
+        "status": status,
+        "errors": {
+          "used": usedErrors,
+          "total": totalErrors,
+        },
+        "time": {
+          "used": usedTime,
+          "total": totalTime,
+        },
       },
     );
 

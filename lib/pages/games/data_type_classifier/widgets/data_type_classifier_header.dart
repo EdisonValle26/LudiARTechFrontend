@@ -5,18 +5,16 @@ import 'package:flutter/material.dart';
 
 import '../../../../widgets/back_button.dart';
 
-class RobotBuilderHeader extends StatelessWidget {
+class DataTypeClassifierHeader extends StatelessWidget {
   final double scale;
   final VoidCallback onExitConfirmed;
   final VoidCallback onInfoPressed;
-  final VoidCallback onGuidePressed;
 
-  const RobotBuilderHeader({
+  const DataTypeClassifierHeader({
     super.key,
     required this.scale,
     required this.onExitConfirmed,
     required this.onInfoPressed,
-    required this.onGuidePressed,
   });
 
   void showExitConfirmDialog(BuildContext context) {
@@ -64,7 +62,7 @@ class RobotBuilderHeader extends StatelessWidget {
               vertical: width * 0.035 * scale,
             ),
             decoration: BoxDecoration(
-              color: Colors.lightGreen,
+              color: Color.fromARGB(255, 144, 107, 209),
               borderRadius: BorderRadius.circular(18 * scale),
             ),
             child: Row(
@@ -76,8 +74,8 @@ class RobotBuilderHeader extends StatelessWidget {
                     shape: BoxShape.circle,
                   ),
                   child: Icon(
-                    Icons.collections_rounded,
-                    color: Colors.lightGreen,
+                    Icons.extension_rounded,
+                    color: Color.fromARGB(255, 144, 107, 209),
                     size: width * 0.075 * scale,
                   ),
                 ),
@@ -87,7 +85,7 @@ class RobotBuilderHeader extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Construye el robot",
+                        "Clasificador de Tipos de Datos",
                         style: TextStyle(
                           fontSize: width * 0.045 * scale,
                           fontWeight: FontWeight.w900,
@@ -96,7 +94,7 @@ class RobotBuilderHeader extends StatelessWidget {
                       ),
                       SizedBox(height: width * 0.01 * scale),
                       Text(
-                        "Adivina la palabra de Microsoft Word",
+                        "Tipo de Datos en Microsoft Excel",
                         style: TextStyle(
                           fontSize: width * 0.028 * scale,
                           fontWeight: FontWeight.w600,
@@ -116,7 +114,7 @@ class RobotBuilderHeader extends StatelessWidget {
                     ),
                     child: Icon(
                       Icons.info_outline,
-                      color: Colors.green,
+                      color: Color.fromARGB(255, 144, 107, 209),
                       size: width * 0.05 * scale,
                     ),
                   ),

@@ -1,4 +1,5 @@
 import 'package:LudiArtech/routes/app_routes.dart';
+import 'package:LudiArtech/widgets/firebase_image.dart';
 import 'package:flutter/material.dart';
 
 class LoginButtons extends StatelessWidget {
@@ -51,11 +52,11 @@ class LoginButtons extends StatelessWidget {
 
               Positioned(
                 top: -robotOffset,
-                child: Image.asset(
-                  'assets/images/Robot_inicio.png',
-                  width: robotWidth,
-                  height: robotHeight,
-                  fit: BoxFit.contain,
+                child: const FirebaseImage(
+                  path: "TECH_inicio_registro.png",
+                  fit: BoxFit.cover,
+                  width: 100,
+                  height: 100,
                 ),
               ),
             ],

@@ -118,33 +118,49 @@ class _PowerPointFormState extends State<PowerPointForm> {
     },
     {
       "question":
-          "6. ¿Qué orientación es ideal para contenido que abarca mayor ancho?",
-      "options": ["Vertical", "Horizontal", "Diagonal", "Cuadrada"],
+          "6. ¿Qué atajo de teclado inicia la presentación desde la diapositiva actual?",
+      "options": ["F5", "Shift + F5", "Ctrl + F5", "Alt + F5"],
+      "correct": "b",
+    },
+    {
+      "type": "fill",
+      "question":
+          "7. Completa la siguiente información sobre la interfaz de PowerPoint",
+      "text":
+          "Para cambiar la vista de la presentación se usa la _____ ubicada en la _____ de la pantalla.",
+      "options": [
+        "Cinta de opciones",
+        "Barra de título",
+        "Barra de estado",
+        "Parte inferior"
+      ],
+      "correct": ["Barra de estado", "Parte inferior"],
+    },
+    {
+      "question":
+          "8. ¿Cuál es el formato de archivo predeterminado de PowerPoint desde la versión 2007?",
+      "options": [".ppt", ".pptx", ".pdf", ".ppsx"],
       "correct": "b",
     },
     {
       "question":
-          "7. ¿Qué orientación es ideal para contenido que abarca mayor ancho?",
-      "options": ["Vertical", "Horizontal", "Diagonal", "Cuadrada"],
+          '9. ¿Qué es un "Patrón de diapositivas" en PowerPoint?',
+      "options": ["Una diapositiva individual", "Una plantilla que controla el diseño de todas las diapositivas", "Un efecto de transición", "Un tipo de animación"],
       "correct": "b",
     },
-    {
+        {
+      "type": "fill",
       "question":
-          "8. ¿Qué orientación es ideal para contenido que abarca mayor ancho?",
-      "options": ["Vertical", "Horizontal", "Diagonal", "Cuadrada"],
-      "correct": "b",
-    },
-    {
-      "question":
-          "9. ¿Qué orientación es ideal para contenido que abarca mayor ancho?",
-      "options": ["Vertical", "Horizontal", "Diagonal", "Cuadrada"],
-      "correct": "b",
-    },
-    {
-      "question":
-          "10. ¿Qué orientación es ideal para contenido que abarca mayor ancho?",
-      "options": ["Vertical", "Horizontal", "Diagonal", "Cuadrada"],
-      "correct": "b",
+          "10. Completa la siguiente información sobre la interfaz de PowerPoint",
+      "text":
+          "El atajo de teclado ____ sirve para duplicar una diapositiva y ____ para crear una nueva diapositiva.",
+      "options": [
+        "Ctrl + M",
+        "Ctrl + G",
+        "Ctrl + P",
+        "Ctrl + D"
+      ],
+      "correct": ["Ctrl + M", "Ctrl + D"],
     },
   ];
 

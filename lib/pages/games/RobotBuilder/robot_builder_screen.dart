@@ -44,7 +44,7 @@ class _RobotBuilderScreenState extends State<RobotBuilderScreen> {
       context: context,
       builder: (_) => const GameInstructionsDialog(
         imagePath: "TECH.png",
-        backgroundColor: Colors.lightBlueAccent,
+        backgroundColor: Colors.lightGreen,
         title: "¡Hola! soy TECH",
         description:
             "¡Construye el Robot!\n\nRecuerda: dispones de 10 vidas en total. Cada vez que pierdas una, deberás esperar 5 minutos para que se recupere.",
@@ -77,7 +77,7 @@ class _RobotBuilderScreenState extends State<RobotBuilderScreen> {
                 RobotBuilderHeader(
                   scale: scale,
                   onExitConfirmed: () {
-                    // memoryKey.currentState?.exitGameAsLose();
+                    memoryKey.currentState?.exitGameAsLose();
                   },
                   onInfoPressed: _showInfoModal,
                   onGuidePressed: _showGuideModal

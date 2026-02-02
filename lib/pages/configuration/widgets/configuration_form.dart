@@ -50,20 +50,6 @@ class ConfigurationForm extends StatelessWidget {
           ConfigCard(
             title: "Aplicación",
             items: [
-              const ConfigItem(
-                label: "Notificaciones",
-                icon: Icons.notifications,
-                iconColor: Colors.purple,
-                isToggle: true,
-                initialValue: true,
-              ),
-              const ConfigItem(
-                label: "Modo Oscuro",
-                icon: Icons.dark_mode,
-                iconColor: Colors.yellow,
-                isToggle: true,
-                initialValue: false,
-              ),
               ConfigItemLanguage(scale: w)
             ],
             w: w,
