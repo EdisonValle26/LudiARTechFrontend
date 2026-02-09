@@ -1,7 +1,7 @@
 class ApiConstants {
-  static const String baseUrl = "http://192.168.100.33:3002";
+  // static const String baseUrl = "http://192.168.100.33:3002";
   // static const String baseUrl = "https://ludiartechbackend.onrender.com";
-  // static const String baseUrl = "http://192.168.100.157:3002";
+  static const String baseUrl = "http://192.168.100.157:3002";
 
   // Auth
   static const String login = "/auth/login";
@@ -25,5 +25,6 @@ class ApiConstants {
   // Lesson
   static const String lessonStatus = "/lessons/status";
   static const String lessonComplete = "/lessons/complete";
+  static const String certificateStatus  = "/lessons/certificate-status";
 
 }

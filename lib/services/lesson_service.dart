@@ -1,3 +1,4 @@
+import 'package:LudiArtech/models/certificate_response.dart';
 import 'package:LudiArtech/models/lesson_status_model.dart';
 
 import '../services/api_service.dart';
@@ -20,8 +21,8 @@ class LessonService {
         .map((e) => LessonStatusModel.fromJson(e))
         .toList();
   }
-  
-    Future<void> completeLesson({
+
+  Future<void> completeLesson({
     required String token,
     required int lessonId,
     required double score,
@@ -36,4 +37,21 @@ class LessonService {
     );
   }
 
+  Future<CertificateStatus> getCertificateStatus({
+    required String token,
+  }) async {
+    final response = await api.getAuth(
+      ApiConstants.certificateStatus,
+      token: token,
+    );
+
+    if (response == null) {
+      return CertificateStatus(
+        canGet: false,
+        fullname: "",
+      );
+    }
+
+    return CertificateStatus.fromJson(response);
+  }
 }

@@ -9,6 +9,8 @@ import 'package:LudiArtech/services/api_service.dart';
 import 'package:LudiArtech/services/lesson_service.dart';
 import 'package:LudiArtech/services/token_storage.dart';
 import 'package:LudiArtech/utils/api_constants.dart';
+import 'package:LudiArtech/utils/certificate_pdf.dart';
+import 'package:LudiArtech/widgets/dialogs/certificate_dialog.dart';
 import 'package:LudiArtech/widgets/dialogs/dialog_motivational.dart';
 import 'package:flutter/material.dart';
 
@@ -316,7 +318,8 @@ class _WordFormState extends State<WordForm> {
                 reviewMode: reviewMode,
                 onPressed: () {
                   if (reviewMode && end >= questions.length) {
-                    Navigator.pushNamed(context, AppRoutes.learningPaths);
+                    _checkCertificate();
+                    //Navigator.pushNamed(context, AppRoutes.learningPaths);
                     return;
                   }
 
@@ -332,5 +335,27 @@ class _WordFormState extends State<WordForm> {
         ),
       ),
     );
+  }
+
+  Future<void> _checkCertificate() async {
+    final token = await TokenStorage.getToken();
+    if (token == null) return;
+
+    final api = ApiService(ApiConstants.baseUrl);
+    final service = LessonService(api);
+
+    final result = await service.getCertificateStatus(token: token);
+
+    if (result.canGet) {
+      CertificateDialog.show(
+        context: context,
+        fullName: result.fullname,
+        onDownload: () async {
+          await CertificatePDF.generate(result.fullname);
+        },
+      );
+    } else {
+      Navigator.pushNamed(context, AppRoutes.learningPaths);
+    }
   }
 }

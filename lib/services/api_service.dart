@@ -76,23 +76,39 @@ class ApiService {
   }
 
   dynamic _handleResponse(http.Response response) {
-    final decoded = jsonDecode(response.body);
+    final body = response.body.trim();
 
-    if (response.statusCode >= 200 && response.statusCode < 300) {
-      return decoded;
+    print("HTTP ${response.statusCode} => $body");
+
+    if (body.isEmpty || body == 'null') {
+      return null;
     }
 
-    String message = 'Error inesperado';
+    try {
+      final decoded = jsonDecode(body);
 
-    if (decoded is Map<String, dynamic>) {
-      final rawMessage = decoded['message'];
-      if (rawMessage is String) {
-        message = rawMessage;
-      } else if (rawMessage is List) {
-        message = rawMessage.join(', ');
+      if (response.statusCode >= 200 && response.statusCode < 300) {
+        return decoded;
       }
-    }
 
-    throw ApiException(message, response.statusCode);
+      String message = 'Error inesperado';
+
+      if (decoded is Map<String, dynamic>) {
+        final rawMessage = decoded['message'];
+        if (rawMessage is String) {
+          message = rawMessage;
+        } else if (rawMessage is List) {
+          message = rawMessage.join(', ');
+        }
+      }
+
+      throw ApiException(message, response.statusCode);
+    } catch (e) {
+      print("JSON PARSE ERROR => $e");
+      print("RAW RESPONSE => $body");
+
+      throw ApiException(
+          "Respuesta inválida del servidor", response.statusCode);
+    }
   }
 }

@@ -9,6 +9,8 @@ import 'package:LudiArtech/services/api_service.dart';
 import 'package:LudiArtech/services/lesson_service.dart';
 import 'package:LudiArtech/services/token_storage.dart';
 import 'package:LudiArtech/utils/api_constants.dart';
+import 'package:LudiArtech/utils/certificate_pdf.dart';
+import 'package:LudiArtech/widgets/dialogs/certificate_dialog.dart';
 import 'package:LudiArtech/widgets/dialogs/dialog_motivational.dart';
 import 'package:flutter/material.dart';
 
@@ -38,14 +40,7 @@ class _PowerPointFormState extends State<PowerPointForm> {
           "1. Completa la siguiente información sobre el diseño de diapositivas:",
       "text":
           "La regla ____ sugiere usar máximo ____ líneas de texto por diapositiva para mantener la atención.",
-      "options": [
-        "cinco",
-        "6x6",
-        "número",
-        "10x10",
-        "diez",
-        "seis"
-      ],
+      "options": ["cinco", "6x6", "número", "10x10", "diez", "seis"],
       "correct": ["6x6", "seis"],
     },
     {
@@ -80,18 +75,19 @@ class _PowerPointFormState extends State<PowerPointForm> {
     {
       "question":
           "4. ¿Cuál es el nombre del panel donde se muestran todas las diapositivas en miniatura?",
-      "options": ["Panel de Notas", "Panel de Diapositivas", "Cinta de Opciones", "Barra de Herramientas"],
+      "options": [
+        "Panel de Notas",
+        "Panel de Diapositivas",
+        "Cinta de Opciones",
+        "Barra de Herramientas"
+      ],
       "correct": "b",
     },
     {
       "type": "drag_group",
-      "question": "5. Ordena cada campo a su área correspondiente en un diseño de Power Point:",
-      "options": [
-        "Contraste",
-        "Alineación",
-        "Proximidad",
-        "Repetición"
-      ],
+      "question":
+          "5. Ordena cada campo a su área correspondiente en un diseño de Power Point:",
+      "options": ["Contraste", "Alineación", "Proximidad", "Repetición"],
       "groups": [
         {
           "label": "Elementos relacionados juntos:",
@@ -106,9 +102,7 @@ class _PowerPointFormState extends State<PowerPointForm> {
         {
           "label": "Mismo estilo en toda presentación:",
           "slots": 1,
-          "correct": [
-            "Repetición"
-          ]
+          "correct": ["Repetición"]
         },
         {
           "label": "Diferencia para destacar elementos:",
@@ -144,23 +138,22 @@ class _PowerPointFormState extends State<PowerPointForm> {
       "correct": "b",
     },
     {
-      "question":
-          '9. ¿Qué es un "Patrón de diapositivas" en PowerPoint?',
-      "options": ["Una diapositiva individual", "Una plantilla que controla el diseño de todas las diapositivas", "Un efecto de transición", "Un tipo de animación"],
+      "question": '9. ¿Qué es un "Patrón de diapositivas" en PowerPoint?',
+      "options": [
+        "Una diapositiva individual",
+        "Una plantilla que controla el diseño de todas las diapositivas",
+        "Un efecto de transición",
+        "Un tipo de animación"
+      ],
       "correct": "b",
     },
-        {
+    {
       "type": "fill",
       "question":
           "10. Completa la siguiente información sobre la interfaz de PowerPoint",
       "text":
           "El atajo de teclado ____ sirve para duplicar una diapositiva y ____ para crear una nueva diapositiva.",
-      "options": [
-        "Ctrl + M",
-        "Ctrl + G",
-        "Ctrl + P",
-        "Ctrl + D"
-      ],
+      "options": ["Ctrl + M", "Ctrl + G", "Ctrl + P", "Ctrl + D"],
       "correct": ["Ctrl + M", "Ctrl + D"],
     },
   ];
@@ -206,7 +199,7 @@ class _PowerPointFormState extends State<PowerPointForm> {
         questionScores.containsKey(start + 1);
   }
 
-    void showResultModal() async {
+  void showResultModal() async {
     final double totalScore = questionScores.values.fold(0.0, (a, b) => a + b);
 
     if (!scoreSaved) {
@@ -304,7 +297,8 @@ class _PowerPointFormState extends State<PowerPointForm> {
                 reviewMode: reviewMode,
                 onPressed: () {
                   if (reviewMode && end >= questions.length) {
-                    Navigator.pushNamed(context, AppRoutes.learningPaths);
+                    _checkCertificate();
+                    //Navigator.pushNamed(context, AppRoutes.learningPaths);
                     return;
                   }
 
@@ -320,5 +314,27 @@ class _PowerPointFormState extends State<PowerPointForm> {
         ),
       ),
     );
+  }
+
+  Future<void> _checkCertificate() async {
+    final token = await TokenStorage.getToken();
+    if (token == null) return;
+
+    final api = ApiService(ApiConstants.baseUrl);
+    final service = LessonService(api);
+
+    final result = await service.getCertificateStatus(token: token);
+
+    if (result.canGet) {
+      CertificateDialog.show(
+        context: context,
+        fullName: result.fullname,
+        onDownload: () async {
+          await CertificatePDF.generate(result.fullname);
+        },
+      );
+    } else {
+      Navigator.pushNamed(context, AppRoutes.learningPaths);
+    }
   }
 }
