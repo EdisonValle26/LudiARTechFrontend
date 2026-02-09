@@ -9,6 +9,7 @@ import 'package:LudiArtech/services/api_service.dart';
 import 'package:LudiArtech/services/lesson_service.dart';
 import 'package:LudiArtech/services/token_storage.dart';
 import 'package:LudiArtech/utils/api_constants.dart';
+import 'package:LudiArtech/widgets/dialogs/dialog_motivational.dart';
 import 'package:flutter/material.dart';
 
 class ExcelForm extends StatefulWidget {
@@ -34,18 +35,19 @@ class _ExcelFormState extends State<ExcelForm> {
     {
       "question":
           "1. ¿Cuál es la principal función de una Tabla Dinámica en Excel?",
-      "options": ["Crear gráficos automáticamente", "Resumir y analizar grandes cantidades de datos", "Formatear celdas con colores", "Proteger hojas de cálculo"],
+      "options": [
+        "Crear gráficos automáticamente",
+        "Resumir y analizar grandes cantidades de datos",
+        "Formatear celdas con colores",
+        "Proteger hojas de cálculo"
+      ],
       "correct": "b",
     },
     {
       "type": "drag_group",
-      "question": "2. Ordena cada campo a su área correspondiente en una Tabla Dinámica:",
-      "options": [
-        "Producto",
-        "Ventas Totales",
-        "Región",
-        "Mes"
-      ],
+      "question":
+          "2. Ordena cada campo a su área correspondiente en una Tabla Dinámica:",
+      "options": ["Producto", "Ventas Totales", "Región", "Mes"],
       "groups": [
         {
           "label": "Filas",
@@ -60,9 +62,7 @@ class _ExcelFormState extends State<ExcelForm> {
         {
           "label": "Valores",
           "slots": 1,
-          "correct": [
-            "Ventas Totales"
-          ]
+          "correct": ["Ventas Totales"]
         }
       ]
     },
@@ -84,7 +84,8 @@ class _ExcelFormState extends State<ExcelForm> {
     },
     {
       "type": "match",
-      "question": "4. Conecta cada elemento con su función en Tablas Dinámicas:",
+      "question":
+          "4. Conecta cada elemento con su función en Tablas Dinámicas:",
       "left": [
         "Actualizar",
         "Filtros",
@@ -113,12 +114,7 @@ class _ExcelFormState extends State<ExcelForm> {
     {
       "type": "drag_group",
       "question": "6. Ordena cada ejemplo según su tipo de dato correcto:",
-      "options": [
-        "25/12/2025",
-        "12345",
-        "14:30:00",
-        "Hola mundo"
-      ],
+      "options": ["25/12/2025", "12345", "14:30:00", "Hola mundo"],
       "groups": [
         {
           "label": "Numero",
@@ -133,9 +129,7 @@ class _ExcelFormState extends State<ExcelForm> {
         {
           "label": "Fecha",
           "slots": 1,
-          "correct": [
-            "25/12/2025"
-          ]
+          "correct": ["25/12/2025"]
         },
         {
           "label": "Hora",
@@ -169,12 +163,18 @@ class _ExcelFormState extends State<ExcelForm> {
     {
       "question":
           "8. ¿Qué símbolo debe anteceder a un número para que Excel lo reconozca como texto?",
-      "options": ['Comilla doble (")', "Apóstrofe (')", "Signo de igual (=)", "Numeral (#)"],
+      "options": [
+        'Comilla doble (")',
+        "Apóstrofe (')",
+        "Signo de igual (=)",
+        "Numeral (#)"
+      ],
       "correct": "b",
     },
     {
       "type": "fill",
-      "question": "9. Completa la siguiente información sobre Tipos de Datos en Microsoft Excel:",
+      "question":
+          "9. Completa la siguiente información sobre Tipos de Datos en Microsoft Excel:",
       "text":
           "Excel almacena las fechas internamente como ____ y las horas como ____ de un día.",
       "options": [
@@ -189,8 +189,13 @@ class _ExcelFormState extends State<ExcelForm> {
     },
     {
       "question":
-      '10. Si escribes "01/02" en una celda, ¿cómo lo interpreta Excel por defecto?',
-      "options": ["Como texto plano", "Como 1 de febrero del año actual", "Como un error", "Como la fracción 1/2"],
+          '10. Si escribes "01/02" en una celda, ¿cómo lo interpreta Excel por defecto?',
+      "options": [
+        "Como texto plano",
+        "Como 1 de febrero del año actual",
+        "Como un error",
+        "Como la fracción 1/2"
+      ],
       "correct": "b",
     },
   ];
@@ -244,14 +249,26 @@ class _ExcelFormState extends State<ExcelForm> {
         await _saveLessonScore(totalScore);
         scoreSaved = true;
       } catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text("Error al guardar la calificación"),
-            backgroundColor: Colors.red,
-          ),
-        );
+        debugPrint("Error enviando resultado: $e");
         return;
       }
+    }
+
+    if (totalScore < 7) {
+      MotivationalDialog.show(
+        context: context,
+        score: totalScore,
+        onReview: () {
+          setState(() {
+            reviewMode = true;
+            currentPage = 0;
+          });
+        },
+        onGoContent: () {
+          Navigator.pushNamed(context, AppRoutes.learningPaths);
+        },
+      );
+      return;
     }
 
     showDialog(

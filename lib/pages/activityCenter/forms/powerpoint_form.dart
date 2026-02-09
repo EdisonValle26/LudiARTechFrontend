@@ -30,9 +30,9 @@ class PowerPointForm extends StatelessWidget {
         children: [
           const SizedBox(height: 8),
           Text(
-            "🏆 Desafío del PP día",
+            "🏆 Desafío Power Point del día",
             style: TextStyle(
-              fontSize: w * 0.060 * scale,
+              fontSize: w * 0.055 * scale,
               fontWeight: FontWeight.w800,
               color: Colors.black,
             ),

@@ -9,6 +9,7 @@ import 'package:LudiArtech/services/api_service.dart';
 import 'package:LudiArtech/services/lesson_service.dart';
 import 'package:LudiArtech/services/token_storage.dart';
 import 'package:LudiArtech/utils/api_constants.dart';
+import 'package:LudiArtech/widgets/dialogs/dialog_motivational.dart';
 import 'package:flutter/material.dart';
 
 class WordForm extends StatefulWidget {
@@ -31,69 +32,6 @@ class _WordFormState extends State<WordForm> {
   final Map<int, dynamic> selectedAnswers = {};
   final Map<int, double> questionScores = {};
   final List<Map<String, dynamic>> questions = [
-    // {
-    //   "type": "drag_group",
-    //   "question": "9. Ordena cada ejemplo según su tipo de dato correcto:",
-    //   "options": [
-    //     "12345",
-    //     "Hola mundo",
-    //     "25/12/2025",
-    //     "14:30:00"
-    //   ],
-    //   "groups": [
-    //     {
-    //       "label": "Numero",
-    //       "slots": 1,
-    //       "correct": ["12345"]
-    //     },
-    //     {
-    //       "label": "Texto",
-    //       "slots": 1,
-    //       "correct": ["Hola mundo"]
-    //     },
-    //     {
-    //       "label": "Fecha",
-    //       "slots": 1,
-    //       "correct": [
-    //         "25/12/2025"
-    //       ]
-    //     },
-    //     {
-    //       "label": "Hora",
-    //       "slots": 1,
-    //       "correct": ["14:30:00"]
-    //     }
-    //   ]
-    // },
-    // {
-    //   "type": "drag_group",
-    //   "question": "9. Ordena cada campo a su área correspondiente en una Tabla Dinámica:",
-    //   "options": [
-    //     "Producto",
-    //     "Ventas Totales",
-    //     "Región",
-    //     "Mes"
-    //   ],
-    //   "groups": [
-    //     {
-    //       "label": "Filas",
-    //       "slots": 2,
-    //       "correct": ["Producto", "Región"]
-    //     },
-    //     {
-    //       "label": "Columnas",
-    //       "slots": 1,
-    //       "correct": ["Mes"]
-    //     },
-    //     {
-    //       "label": "Valores",
-    //       "slots": 1,
-    //       "correct": [
-    //         "Ventas Totales"
-    //       ]
-    //     }
-    //   ]
-    // },
     {
       "question":
           "1. ¿En qué pestaña de Microsoft Word se encuentra la opción para insertar imágenes?",
@@ -288,14 +226,26 @@ class _WordFormState extends State<WordForm> {
         await _saveLessonScore(totalScore);
         scoreSaved = true;
       } catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text("Error al guardar la calificación"),
-            backgroundColor: Colors.red,
-          ),
-        );
+        debugPrint("Error enviando resultado: $e");
         return;
       }
+    }
+
+    if (totalScore < 7) {
+      MotivationalDialog.show(
+        context: context,
+        score: totalScore,
+        onReview: () {
+          setState(() {
+            reviewMode = true;
+            currentPage = 0;
+          });
+        },
+        onGoContent: () {
+          Navigator.pushNamed(context, AppRoutes.learningPaths);
+        },
+      );
+      return;
     }
 
     showDialog(

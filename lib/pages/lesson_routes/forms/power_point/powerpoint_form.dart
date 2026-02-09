@@ -9,6 +9,7 @@ import 'package:LudiArtech/services/api_service.dart';
 import 'package:LudiArtech/services/lesson_service.dart';
 import 'package:LudiArtech/services/token_storage.dart';
 import 'package:LudiArtech/utils/api_constants.dart';
+import 'package:LudiArtech/widgets/dialogs/dialog_motivational.dart';
 import 'package:flutter/material.dart';
 
 class PowerPointForm extends StatefulWidget {
@@ -205,7 +206,7 @@ class _PowerPointFormState extends State<PowerPointForm> {
         questionScores.containsKey(start + 1);
   }
 
-  void showResultModal() async {
+    void showResultModal() async {
     final double totalScore = questionScores.values.fold(0.0, (a, b) => a + b);
 
     if (!scoreSaved) {
@@ -213,14 +214,26 @@ class _PowerPointFormState extends State<PowerPointForm> {
         await _saveLessonScore(totalScore);
         scoreSaved = true;
       } catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text("Error al guardar la calificación"),
-            backgroundColor: Colors.red,
-          ),
-        );
+        debugPrint("Error enviando resultado: $e");
         return;
       }
+    }
+
+    if (totalScore < 7) {
+      MotivationalDialog.show(
+        context: context,
+        score: totalScore,
+        onReview: () {
+          setState(() {
+            reviewMode = true;
+            currentPage = 0;
+          });
+        },
+        onGoContent: () {
+          Navigator.pushNamed(context, AppRoutes.learningPaths);
+        },
+      );
+      return;
     }
 
     showDialog(
