@@ -10,7 +10,7 @@ class CertificateStatus {
   factory CertificateStatus.fromJson(Map<String, dynamic> json) {
     return CertificateStatus(
       canGet: json["canGetCertificate"] ?? false,
-      fullname: json["fullname"] ?? "",
+      fullname: json["fullName"] ?? "",
     );
   }
 }

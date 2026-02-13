@@ -9,47 +9,88 @@ class CertificatePDF {
     pdf.addPage(
       pw.Page(
         pageFormat: PdfPageFormat.a4.landscape,
-        build: (context) => pw.Container(
-          padding: const pw.EdgeInsets.all(32),
-          decoration: pw.BoxDecoration(
-            border: pw.Border.all(width: 3),
-          ),
-          child: pw.Column(
-            mainAxisAlignment: pw.MainAxisAlignment.center,
-            children: [
-              pw.Text(
-                "CERTIFICADO DE APROBACIÓN",
-                style: pw.TextStyle(
-                  fontSize: 32,
-                  fontWeight: pw.FontWeight.bold,
+        build: (context) {
+          return pw.Container(
+            width: double.infinity,
+            height: double.infinity,
+            padding: const pw.EdgeInsets.all(32),
+            decoration: pw.BoxDecoration(
+              gradient: pw.LinearGradient(
+                colors: [
+                  PdfColors.deepPurple100,
+                  PdfColors.white,
+                  PdfColors.lightBlue100,
+                ],
+                begin: pw.Alignment.topLeft,
+                end: pw.Alignment.bottomRight,
+              ),
+              border: pw.Border.all(color: PdfColors.deepPurple, width: 4),
+              borderRadius: pw.BorderRadius.all(pw.Radius.circular(20)),
+            ),
+            child: pw.Column(
+              mainAxisAlignment: pw.MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: pw.CrossAxisAlignment.stretch,
+              children: [
+                pw.Column(
+                  children: [
+                    pw.Text(
+                      "CERTIFICADO DE APROBACIÓN",
+                      style: pw.TextStyle(
+                        fontSize: 36,
+                        fontWeight: pw.FontWeight.bold,
+                        color: PdfColors.deepPurple900,
+                      ),
+                      textAlign: pw.TextAlign.center,
+                    ),
+                    pw.SizedBox(height: 16),
+                    pw.Text(
+                      "LudiARTech",
+                      style: pw.TextStyle(
+                        fontSize: 28,
+                        fontWeight: pw.FontWeight.bold,
+                        color: PdfColors.deepPurple700,
+                      ),
+                      textAlign: pw.TextAlign.center,
+                    ),
+                  ],
                 ),
-              ),
-              pw.SizedBox(height: 30),
-              pw.Text("LudiARTech", style: pw.TextStyle(fontSize: 26)),
-              pw.SizedBox(height: 20),
-              pw.Text(
-                "Otorga el presente certificado",
-                textAlign: pw.TextAlign.center,
-                style: const pw.TextStyle(fontSize: 18),
-              ),
-              pw.Text(
-                fullName,
-                style: pw.TextStyle(
-                  fontSize: 28,
-                  fontWeight: pw.FontWeight.bold,
+
+                pw.Column(
+                  children: [
+                    pw.Text(
+                      "Otorga el presente certificado a",
+                      style: pw.TextStyle(
+                        fontSize: 20,
+                        color: PdfColors.black,
+                      ),
+                      textAlign: pw.TextAlign.center,
+                    ),
+                    pw.SizedBox(height: 12),
+                    pw.Text(
+                      fullName,
+                      style: pw.TextStyle(
+                        fontSize: 32,
+                        fontWeight: pw.FontWeight.bold,
+                        color: PdfColors.blue900,
+                      ),
+                      textAlign: pw.TextAlign.center,
+                    ),
+                    pw.SizedBox(height: 16),
+                    pw.Text(
+                      "Por haber completado y aprobado satisfactoriamente todas las lecciones del programa formativo.",
+                      style: pw.TextStyle(
+                        fontSize: 18,
+                        color: PdfColors.black,
+                        height: 1.5,
+                      ),
+                      textAlign: pw.TextAlign.center,
+                    ),
+                  ],
                 ),
-              ),
-              pw.SizedBox(height: 20),
-              pw.Text(
-                "Por haber completado y aprobado satisfactoriamente todas las lecciones...",
-                textAlign: pw.TextAlign.center,
-                style: const pw.TextStyle(fontSize: 18),
-              ),
-              pw.SizedBox(height: 40),
-              pw.Text("🎓", style: const pw.TextStyle(fontSize: 60)),
-            ],
-          ),
-        ),
+              ],
+            ),
+          );
+        },
       ),
     );
 

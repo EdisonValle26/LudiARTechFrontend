@@ -154,7 +154,7 @@ class _PowerPointFormState extends State<PowerPointForm> {
       "text":
           "El atajo de teclado ____ sirve para duplicar una diapositiva y ____ para crear una nueva diapositiva.",
       "options": ["Ctrl + M", "Ctrl + G", "Ctrl + P", "Ctrl + D"],
-      "correct": ["Ctrl + M", "Ctrl + D"],
+      "correct": ["Ctrl + D", "Ctrl + M"],
     },
   ];
 

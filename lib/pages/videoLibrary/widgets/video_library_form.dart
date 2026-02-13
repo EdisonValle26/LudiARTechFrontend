@@ -39,14 +39,6 @@ class VideoLibraryForm extends StatelessWidget {
                   color: Colors.black,
                 ),
               ),
-              Text(
-                "Ver todos",
-                style: TextStyle(
-                  fontSize: w * 0.040 * scale,
-                  fontWeight: FontWeight.w800,
-                  color: Colors.purpleAccent,
-                ),
-              ),
             ],
           ),
           SizedBox(height: sectionSpacing),

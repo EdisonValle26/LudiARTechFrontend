@@ -46,17 +46,9 @@ class _FirebaseVideoPlayerState extends State<FirebaseVideoPlayer> {
 
   @override
   void dispose() {
+    _controller?.pause();
     _controller?.dispose();
     super.dispose();
-  }
-
-  void _togglePlay() {
-    if (_controller == null) return;
-    setState(() {
-      _controller!.value.isPlaying
-          ? _controller!.pause()
-          : _controller!.play();
-    });
   }
 
   void _enterFullScreen() {
@@ -73,6 +65,7 @@ class _FirebaseVideoPlayerState extends State<FirebaseVideoPlayer> {
         builder: (_) => FullScreenVideo(
           controller: _controller!,
           onExit: () {
+            _controller?.pause();
             SystemChrome.setPreferredOrientations([
               DeviceOrientation.portraitUp,
               DeviceOrientation.portraitDown,
@@ -102,20 +95,22 @@ class _FirebaseVideoPlayerState extends State<FirebaseVideoPlayer> {
       );
     }
 
-    return GestureDetector(
-      onTap: _togglePlay,
-      onDoubleTap: _enterFullScreen,
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          AspectRatio(
-            aspectRatio: _controller!.value.aspectRatio,
-            child: VideoPlayer(_controller!),
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        AspectRatio(
+          aspectRatio: _controller!.value.aspectRatio,
+          child: VideoPlayer(_controller!),
+        ),
+        Positioned(
+          top: 8,
+          right: 8,
+          child: IconButton(
+            icon: const Icon(Icons.fullscreen, color: Colors.white, size: 28),
+            onPressed: _enterFullScreen,
           ),
-          if (!_controller!.value.isPlaying)
-            const Icon(Icons.play_circle, color: Colors.white, size: 55),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
@@ -143,6 +138,13 @@ class _FullScreenVideoState extends State<FullScreenVideo> {
     super.initState();
     _volume = widget.controller.value.volume;
     _playbackSpeed = widget.controller.value.playbackSpeed;
+    widget.controller.play();
+  }
+
+  @override
+  void dispose() {
+    widget.controller.pause();
+    super.dispose();
   }
 
   void _togglePlay() {
@@ -167,14 +169,8 @@ class _FullScreenVideoState extends State<FullScreenVideo> {
     });
   }
 
-  void _seekVideo(Duration position) {
-    widget.controller.seekTo(position);
-  }
-
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-
     return Scaffold(
       backgroundColor: Colors.black,
       body: SafeArea(
@@ -236,17 +232,19 @@ class _FullScreenVideoState extends State<FullScreenVideo> {
                         activeColor: Colors.purpleAccent,
                         onChanged: _changeSpeed,
                       ),
+                      IconButton(
+                        icon: Icon(
+                          widget.controller.value.isPlaying
+                              ? Icons.pause_circle_filled
+                              : Icons.play_circle_fill,
+                          color: Colors.white,
+                          size: 36,
+                        ),
+                        onPressed: _togglePlay,
+                      ),
                     ],
                   ),
                 ],
-              ),
-            ),
-            GestureDetector(
-              onTap: _togglePlay,
-              child: Center(
-                child: widget.controller.value.isPlaying
-                    ? const SizedBox.shrink()
-                    : const Icon(Icons.play_circle, color: Colors.white, size: 80),
               ),
             ),
           ],
