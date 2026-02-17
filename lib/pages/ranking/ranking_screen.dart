@@ -1,4 +1,5 @@
 import 'package:LudiArtech/widgets/main_footer.dart';
+import 'package:LudiArtech/widgets/no_back_button.dart';
 import 'package:flutter/material.dart';
 
 import '../../widgets/background.dart';
@@ -14,21 +15,21 @@ class RankingScreen extends StatelessWidget {
 
     final scale = height < 800 ? height / 800 : 1.0;
 
-    return Scaffold(
-      body: SafeArea(
-        child: Stack(
-          children: [
-            const AppBackground(child: SizedBox()),
-
-            Column(
-              children: [
-                RankingHeader(scale: scale),
-                Expanded(child: RankingForm(scale: scale)),
-              ],
-            ),
-
-            const MainFooter()
-          ],
+    return NoBackWrapper(
+      child: Scaffold(
+        body: SafeArea(
+          child: Stack(
+            children: [
+              const AppBackground(child: SizedBox()),
+              Column(
+                children: [
+                  RankingHeader(scale: scale),
+                  Expanded(child: RankingForm(scale: scale)),
+                ],
+              ),
+              const MainFooter()
+            ],
+          ),
         ),
       ),
     );

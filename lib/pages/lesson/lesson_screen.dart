@@ -1,5 +1,6 @@
 import 'package:LudiArtech/models/lesson_args.dart';
 import 'package:LudiArtech/routes/app_routes.dart';
+import 'package:LudiArtech/widgets/no_back_button.dart';
 import 'package:flutter/material.dart';
 
 import '../../widgets/back_button.dart';
@@ -7,10 +8,8 @@ import '../../widgets/background.dart';
 import 'widgets/lesson_form.dart';
 
 class LessonScreen extends StatelessWidget {
-
   const LessonScreen({
     super.key,
-
   });
 
   @override
@@ -19,27 +18,27 @@ class LessonScreen extends StatelessWidget {
     final height = MediaQuery.of(context).size.height;
     final scale = height < 800 ? height / 800 : 1.0;
 
-    return Scaffold(
-      body: SafeArea(
-        child: Stack(
-          children: [
-            const AppBackground(child: SizedBox()),
-
-            Column(
-              children: [
-                Expanded(
-                  child: LessonForm(
-                    scale: scale,
-                    title: args.title,
-                    imagePath: args.imagePath,
+    return NoBackWrapper(
+      child: Scaffold(
+        body: SafeArea(
+          child: Stack(
+            children: [
+              const AppBackground(child: SizedBox()),
+              Column(
+                children: [
+                  Expanded(
+                    child: LessonForm(
+                      scale: scale,
+                      title: args.title,
+                      imagePath: args.imagePath,
+                    ),
                   ),
-                ),
-              ],
-            ),
-
-            BackButtonWidget(scale: scale, routeName: AppRoutes.learningPaths),
-
-          ],
+                ],
+              ),
+              BackButtonWidget(
+                  scale: scale, routeName: AppRoutes.learningPaths),
+            ],
+          ),
         ),
       ),
     );

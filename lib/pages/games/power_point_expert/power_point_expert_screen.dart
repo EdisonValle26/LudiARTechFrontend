@@ -2,6 +2,7 @@ import 'package:LudiArtech/pages/games/power_point_expert/widgets/power_point_ex
 import 'package:LudiArtech/pages/games/power_point_expert/widgets/power_point_expert_header.dart';
 import 'package:LudiArtech/widgets/background.dart';
 import 'package:LudiArtech/widgets/dialogs/game_instructions_dialog.dart';
+import 'package:LudiArtech/widgets/no_back_button.dart';
 import 'package:flutter/material.dart';
 
 class PowerPointExpertScreen extends StatefulWidget {
@@ -55,29 +56,31 @@ class _PowerPointExpertScreenState extends State<PowerPointExpertScreen> {
     final height = MediaQuery.of(context).size.height;
     final scale = height < 800 ? height / 800 : 1.0;
 
-    return Scaffold(
-      body: SafeArea(
-        child: Stack(
-          children: [
-            const AppBackground(child: SizedBox()),
-            Column(
-              children: [
-                PowerPointExpertHeader(
-                  scale: scale,
-                  onExitConfirmed: () {
-                    gameKey.currentState?.exitGameAsLose();
-                  },
-                  onInfoPressed: _showInstructions,
-                ),
-                Expanded(
-                  child: PowerPointExpertForm(
-                    key: gameKey,
+    return NoBackWrapper(
+      child: Scaffold(
+        body: SafeArea(
+          child: Stack(
+            children: [
+              const AppBackground(child: SizedBox()),
+              Column(
+                children: [
+                  PowerPointExpertHeader(
                     scale: scale,
+                    onExitConfirmed: () {
+                      gameKey.currentState?.exitGameAsLose();
+                    },
+                    onInfoPressed: _showInstructions,
                   ),
-                ),
-              ],
-            ),
-          ],
+                  Expanded(
+                    child: PowerPointExpertForm(
+                      key: gameKey,
+                      scale: scale,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -1,6 +1,7 @@
 import 'package:LudiArtech/widgets/background.dart';
 import 'package:LudiArtech/widgets/dialogs/game_instructions_dialog.dart';
 import 'package:LudiArtech/widgets/dialogs/memory_pairs_guide_dialog.dart';
+import 'package:LudiArtech/widgets/no_back_button.dart';
 import 'package:flutter/material.dart';
 
 import 'widgets/robot_builder_form.dart';
@@ -58,7 +59,6 @@ class _RobotBuilderScreenState extends State<RobotBuilderScreen> {
       ),
     ).then((_) {
       _dialogShown = false;
-
     });
   }
 
@@ -67,30 +67,31 @@ class _RobotBuilderScreenState extends State<RobotBuilderScreen> {
     final height = MediaQuery.of(context).size.height;
     final scale = height < 800 ? height / 800 : 1.0;
 
-    return Scaffold(
-      body: SafeArea(
-        child: Stack(
-          children: [
-            const AppBackground(child: SizedBox()),
-            Column(
-              children: [
-                RobotBuilderHeader(
-                  scale: scale,
-                  onExitConfirmed: () {
-                    memoryKey.currentState?.exitGameAsLose();
-                  },
-                  onInfoPressed: _showInfoModal,
-                  onGuidePressed: _showGuideModal
-                ),
-                Expanded(
-                  child: RobotBuilderForm(
-                    key: memoryKey,
-                    scale: scale,
+    return NoBackWrapper(
+      child: Scaffold(
+        body: SafeArea(
+          child: Stack(
+            children: [
+              const AppBackground(child: SizedBox()),
+              Column(
+                children: [
+                  RobotBuilderHeader(
+                      scale: scale,
+                      onExitConfirmed: () {
+                        memoryKey.currentState?.exitGameAsLose();
+                      },
+                      onInfoPressed: _showInfoModal,
+                      onGuidePressed: _showGuideModal),
+                  Expanded(
+                    child: RobotBuilderForm(
+                      key: memoryKey,
+                      scale: scale,
+                    ),
                   ),
-                ),
-              ],
-            ),
-          ],
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -1,4 +1,5 @@
 import 'package:LudiArtech/widgets/custom_footer.dart';
+import 'package:LudiArtech/widgets/no_back_button.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -18,23 +19,23 @@ class LearnignPathsScreen extends StatelessWidget {
 
     return ChangeNotifierProvider(
       create: (_) => RoutesProvider(),
-      child: Scaffold(
-      body: SafeArea(
-        child: Stack(
-          children: [
-            const AppBackground(child: SizedBox()),
-
-            Column(
+      child: NoBackWrapper(
+        child: Scaffold(
+          body: SafeArea(
+            child: Stack(
               children: [
-                LearningPathsHeader(scale: scale),
-                Expanded(child: LearnignPathsForm(scale: scale)),
+                const AppBackground(child: SizedBox()),
+                Column(
+                  children: [
+                    LearningPathsHeader(scale: scale),
+                    Expanded(child: LearnignPathsForm(scale: scale)),
+                  ],
+                ),
+                const CustomerFooter()
               ],
             ),
-
-            const CustomerFooter()
-          ],
+          ),
         ),
-      ),
       ),
     );
   }

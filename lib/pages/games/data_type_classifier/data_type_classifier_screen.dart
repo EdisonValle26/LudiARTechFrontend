@@ -1,5 +1,6 @@
 import 'package:LudiArtech/widgets/background.dart';
 import 'package:LudiArtech/widgets/dialogs/game_instructions_dialog.dart';
+import 'package:LudiArtech/widgets/no_back_button.dart';
 import 'package:flutter/material.dart';
 
 import 'widgets/data_type_classifier_form.dart';
@@ -9,7 +10,8 @@ class DataTypeClassifierScreen extends StatefulWidget {
   const DataTypeClassifierScreen({super.key});
 
   @override
-  State<DataTypeClassifierScreen> createState() => _DataTypeClassifierScreenState();
+  State<DataTypeClassifierScreen> createState() =>
+      _DataTypeClassifierScreenState();
 }
 
 class _DataTypeClassifierScreenState extends State<DataTypeClassifierScreen> {
@@ -43,8 +45,10 @@ class _DataTypeClassifierScreenState extends State<DataTypeClassifierScreen> {
         instructions: [
           "Clasifica datos según su tipo en Excel.",
           "Arrastra cada dato a su categoría correcta:\nNÚMERO (valores)\nTEXTO (palabras)\nFECHA Y HORA",
-          "Dispones de 3 minutos para completar la actividad; si no lo logras, perderás una vida."       ],
-        finalMessage: "¡Clasifica los datos de manera correcta en el menor tiempo posible!",
+          "Dispones de 3 minutos para completar la actividad; si no lo logras, perderás una vida."
+        ],
+        finalMessage:
+            "¡Clasifica los datos de manera correcta en el menor tiempo posible!",
       ),
     ).then((_) {
       _dialogShown = false;
@@ -56,29 +60,31 @@ class _DataTypeClassifierScreenState extends State<DataTypeClassifierScreen> {
     final height = MediaQuery.of(context).size.height;
     final scale = height < 800 ? height / 800 : 1.0;
 
-    return Scaffold(
-      body: SafeArea(
-        child: Stack(
-          children: [
-            const AppBackground(child: SizedBox()),
-            Column(
-              children: [
-                DataTypeClassifierHeader(
-                  scale: scale,
-                  onExitConfirmed: () {
-                    puzzleKey.currentState?.exitGameAsLose();
-                  },
-                  onInfoPressed: _showInfoModal,
-                ),
-                Expanded(
-                  child: DataTypeClassifierForm(
-                    key: puzzleKey,
+    return NoBackWrapper(
+      child: Scaffold(
+        body: SafeArea(
+          child: Stack(
+            children: [
+              const AppBackground(child: SizedBox()),
+              Column(
+                children: [
+                  DataTypeClassifierHeader(
                     scale: scale,
+                    onExitConfirmed: () {
+                      puzzleKey.currentState?.exitGameAsLose();
+                    },
+                    onInfoPressed: _showInfoModal,
                   ),
-                ),
-              ],
-            ),
-          ],
+                  Expanded(
+                    child: DataTypeClassifierForm(
+                      key: puzzleKey,
+                      scale: scale,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

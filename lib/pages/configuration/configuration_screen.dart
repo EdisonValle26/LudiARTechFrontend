@@ -1,3 +1,4 @@
+import 'package:LudiArtech/widgets/no_back_button.dart';
 import 'package:flutter/material.dart';
 
 import '../../widgets/background.dart';
@@ -16,26 +17,26 @@ class ConfigurationScreen extends StatelessWidget {
 
     const double footerHeight = 75;
 
-    return Scaffold(
-      body: SafeArea(
-        child: Stack(
-          children: [
-            const AppBackground(child: SizedBox()),
-
-            Padding(
-              padding: const EdgeInsets.only(
-                bottom: footerHeight * 1.5,
+    return NoBackWrapper(
+      child: Scaffold(
+        body: SafeArea(
+          child: Stack(
+            children: [
+              const AppBackground(child: SizedBox()),
+              Padding(
+                padding: const EdgeInsets.only(
+                  bottom: footerHeight * 1.5,
+                ),
+                child: Column(
+                  children: [
+                    ConfigurationHeader(scale: scale),
+                    Expanded(child: ConfigurationForm(scale: scale)),
+                  ],
+                ),
               ),
-              child: Column(
-                children: [
-                  ConfigurationHeader(scale: scale),
-                  Expanded(child: ConfigurationForm(scale: scale)),
-                ],
-              ),
-            ),
-            
-            MainFooter(),
-          ],
+              MainFooter(),
+            ],
+          ),
         ),
       ),
     );

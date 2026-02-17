@@ -2,6 +2,7 @@ import 'package:LudiArtech/pages/games/slide_elements/widgets/slide_elements_for
 import 'package:LudiArtech/pages/games/slide_elements/widgets/slide_elements_header.dart';
 import 'package:LudiArtech/widgets/background.dart';
 import 'package:LudiArtech/widgets/dialogs/game_instructions_dialog.dart';
+import 'package:LudiArtech/widgets/no_back_button.dart';
 import 'package:flutter/material.dart';
 
 class SlideElementsScreen extends StatefulWidget {
@@ -44,7 +45,8 @@ class _SlideElementsScreenState extends State<SlideElementsScreen> {
           "Dispones de 2 minutos para resolver cada nivel.",
           "En cada nivel puedes cometer hasta 4 errores; si superas este límite, perderás una vida y deberás comenzar desde el inicio del juego."
         ],
-        finalMessage: "¡Conecta los elementos con sus funciones en el menor tiempo posible!",
+        finalMessage:
+            "¡Conecta los elementos con sus funciones en el menor tiempo posible!",
       ),
     ).then((_) {
       _dialogShown = false;
@@ -56,29 +58,31 @@ class _SlideElementsScreenState extends State<SlideElementsScreen> {
     final height = MediaQuery.of(context).size.height;
     final scale = height < 800 ? height / 800 : 1.0;
 
-    return Scaffold(
-      body: SafeArea(
-        child: Stack(
-          children: [
-            const AppBackground(child: SizedBox()),
-            Column(
-              children: [
-                SlideElementsHeader(
-                  scale: scale,
-                  onExitConfirmed: () {
-                    puzzleKey.currentState?.exitGameAsLose();
-                  },
-                  onInfoPressed: _showInfoModal,
-                ),
-                Expanded(
-                  child: SlideElementsForm(
-                    key: puzzleKey,
+    return NoBackWrapper(
+      child: Scaffold(
+        body: SafeArea(
+          child: Stack(
+            children: [
+              const AppBackground(child: SizedBox()),
+              Column(
+                children: [
+                  SlideElementsHeader(
                     scale: scale,
+                    onExitConfirmed: () {
+                      puzzleKey.currentState?.exitGameAsLose();
+                    },
+                    onInfoPressed: _showInfoModal,
                   ),
-                ),
-              ],
-            ),
-          ],
+                  Expanded(
+                    child: SlideElementsForm(
+                      key: puzzleKey,
+                      scale: scale,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

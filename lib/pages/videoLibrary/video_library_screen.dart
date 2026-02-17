@@ -1,4 +1,5 @@
 import 'package:LudiArtech/widgets/custom_footer.dart';
+import 'package:LudiArtech/widgets/no_back_button.dart';
 import 'package:flutter/material.dart';
 
 import '../../widgets/background.dart';
@@ -14,21 +15,21 @@ class VideoLibraryScreen extends StatelessWidget {
 
     final scale = height < 800 ? height / 800 : 1.0;
 
-    return Scaffold(
-      body: SafeArea(
-        child: Stack(
-          children: [
-            const AppBackground(child: SizedBox()),
-
-            Column(
-              children: [
-                VideoLibraryHeader(scale: scale),
-                Expanded(child: VideoLibraryForm(scale: scale)),
-              ],
-            ),
-
-            const CustomerFooter()
-          ],
+    return NoBackWrapper(
+      child: Scaffold(
+        body: SafeArea(
+          child: Stack(
+            children: [
+              const AppBackground(child: SizedBox()),
+              Column(
+                children: [
+                  VideoLibraryHeader(scale: scale),
+                  Expanded(child: VideoLibraryForm(scale: scale)),
+                ],
+              ),
+              const CustomerFooter()
+            ],
+          ),
         ),
       ),
     );

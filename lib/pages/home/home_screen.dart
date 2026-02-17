@@ -1,3 +1,4 @@
+import 'package:LudiArtech/widgets/no_back_button.dart';
 import 'package:flutter/material.dart';
 
 import '../../widgets/background.dart';
@@ -14,21 +15,21 @@ class HomeScreen extends StatelessWidget {
 
     final scale = height < 800 ? height / 800 : 1.0;
 
-    return Scaffold(
-      body: SafeArea(
-        child: Stack(
-          children: [
-            const AppBackground(child: SizedBox()),
-
-            Column(
-              children: [
-                HomeHeader(scale: scale),
-                Expanded(child: HomeForm(scale: scale)),
-              ],
-            ),
-
-            const MainFooter(),
-          ],
+    return NoBackWrapper(
+      child: Scaffold(
+        body: SafeArea(
+          child: Stack(
+            children: [
+              const AppBackground(child: SizedBox()),
+              Column(
+                children: [
+                  HomeHeader(scale: scale),
+                  Expanded(child: HomeForm(scale: scale)),
+                ],
+              ),
+              const MainFooter(),
+            ],
+          ),
         ),
       ),
     );

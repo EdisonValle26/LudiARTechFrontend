@@ -1,3 +1,4 @@
+import 'package:LudiArtech/widgets/no_back_button.dart';
 import 'package:flutter/material.dart';
 
 import '../../widgets/background.dart';
@@ -10,26 +11,25 @@ class RegisterScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: SafeArea(
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            final size = MediaQuery.of(context).size;
+    return NoBackWrapper(
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        body: SafeArea(
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              final size = MediaQuery.of(context).size;
 
-            return Stack(
-              alignment: Alignment.center,
-              children: [
-                const AppBackground(child: SizedBox()),
-
-                BackButtonWidget(top: size.height * 0.001),
-
-                const RegisterButtons(bottom: 0.72),
-
-                const RegisterForm(),
-              ],
-            );
-          },
+              return Stack(
+                alignment: Alignment.center,
+                children: [
+                  const AppBackground(child: SizedBox()),
+                  BackButtonWidget(top: size.height * 0.001),
+                  const RegisterButtons(bottom: 0.72),
+                  const RegisterForm(),
+                ],
+              );
+            },
+          ),
         ),
       ),
     );

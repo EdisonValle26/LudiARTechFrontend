@@ -1,6 +1,7 @@
 import 'package:LudiArtech/widgets/background.dart';
 import 'package:LudiArtech/widgets/dialogs/game_instructions_dialog.dart';
 import 'package:LudiArtech/widgets/dialogs/memory_pairs_guide_dialog.dart';
+import 'package:LudiArtech/widgets/no_back_button.dart';
 import 'package:flutter/material.dart';
 
 import 'widgets/memory_pairs_form.dart';
@@ -60,8 +61,8 @@ class _MemoryPairsScreenState extends State<MemoryPairsScreen> {
       _dialogShown = false;
 
       Future.delayed(const Duration(milliseconds: 100), () {
-      _showGuideModal();
-    });
+        _showGuideModal();
+      });
     });
   }
 
@@ -70,30 +71,31 @@ class _MemoryPairsScreenState extends State<MemoryPairsScreen> {
     final height = MediaQuery.of(context).size.height;
     final scale = height < 800 ? height / 800 : 1.0;
 
-    return Scaffold(
-      body: SafeArea(
-        child: Stack(
-          children: [
-            const AppBackground(child: SizedBox()),
-            Column(
-              children: [
-                MemoryPairsHeader(
-                  scale: scale,
-                  onExitConfirmed: () {
-                    memoryKey.currentState?.exitGameAsLose();
-                  },
-                  onInfoPressed: _showInfoModal,
-                  onGuidePressed: _showGuideModal
-                ),
-                Expanded(
-                  child: MemoryPairsForm(
-                    key: memoryKey,
-                    scale: scale,
+    return NoBackWrapper(
+      child: Scaffold(
+        body: SafeArea(
+          child: Stack(
+            children: [
+              const AppBackground(child: SizedBox()),
+              Column(
+                children: [
+                  MemoryPairsHeader(
+                      scale: scale,
+                      onExitConfirmed: () {
+                        memoryKey.currentState?.exitGameAsLose();
+                      },
+                      onInfoPressed: _showInfoModal,
+                      onGuidePressed: _showGuideModal),
+                  Expanded(
+                    child: MemoryPairsForm(
+                      key: memoryKey,
+                      scale: scale,
+                    ),
                   ),
-                ),
-              ],
-            ),
-          ],
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

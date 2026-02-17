@@ -1,5 +1,6 @@
 import 'package:LudiArtech/widgets/background.dart';
 import 'package:LudiArtech/widgets/dialogs/game_instructions_dialog.dart';
+import 'package:LudiArtech/widgets/no_back_button.dart';
 import 'package:flutter/material.dart';
 
 import 'widgets/sliding_puzzle_form.dart';
@@ -59,29 +60,31 @@ class _SlidingPuzzleScreenState extends State<SlidingPuzzleScreen> {
     final height = MediaQuery.of(context).size.height;
     final scale = height < 800 ? height / 800 : 1.0;
 
-    return Scaffold(
-      body: SafeArea(
-        child: Stack(
-          children: [
-            const AppBackground(child: SizedBox()),
-            Column(
-              children: [
-                SlidingPuzzleHeader(
-                  scale: scale,
-                  onExitConfirmed: () {
-                    puzzleKey.currentState?.exitGameAsLose();
-                  },
-                  onInfoPressed: _showInfoModal,
-                ),
-                Expanded(
-                  child: SlidingPuzzleForm(
-                    key: puzzleKey,
+    return NoBackWrapper(
+      child: Scaffold(
+        body: SafeArea(
+          child: Stack(
+            children: [
+              const AppBackground(child: SizedBox()),
+              Column(
+                children: [
+                  SlidingPuzzleHeader(
                     scale: scale,
+                    onExitConfirmed: () {
+                      puzzleKey.currentState?.exitGameAsLose();
+                    },
+                    onInfoPressed: _showInfoModal,
                   ),
-                ),
-              ],
-            ),
-          ],
+                  Expanded(
+                    child: SlidingPuzzleForm(
+                      key: puzzleKey,
+                      scale: scale,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
