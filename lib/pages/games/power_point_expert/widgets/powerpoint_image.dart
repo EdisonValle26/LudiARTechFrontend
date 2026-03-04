@@ -1,5 +1,4 @@
 import 'package:LudiArtech/widgets/firebase_image.dart';
-import 'package:LudiArtech/widgets/no_back_button.dart';
 import 'package:flutter/material.dart';
 
 class PowerPointImage extends StatelessWidget {
@@ -11,8 +10,7 @@ class PowerPointImage extends StatelessWidget {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (_) => NoBackWrapper(
-          child: Scaffold(
+        builder: (_) => Scaffold(
             backgroundColor: Colors.black,
             appBar: AppBar(
               backgroundColor: Colors.black,
@@ -30,7 +28,6 @@ class PowerPointImage extends StatelessWidget {
             ),
           ),
         ),
-      ),
     );
   }
 

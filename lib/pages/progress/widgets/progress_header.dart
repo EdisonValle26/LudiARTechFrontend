@@ -143,7 +143,9 @@ class ProgressHeader extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    "${stats.points}/${stats.maxPoints} P",
+                    stats.isMaxProgress
+                        ? "🏆 MAX LEVEL"
+                        : "${stats.points}/${stats.maxPoints} P",
                     style: TextStyle(
                       fontSize: w * 0.050 * scale,
                       fontWeight: FontWeight.bold,
@@ -163,8 +165,7 @@ class ProgressHeader extends StatelessWidget {
                 children: statCards.map((card) {
                   return Expanded(
                     child: Padding(
-                      padding:
-                          const EdgeInsets.symmetric(horizontal: 4),
+                      padding: const EdgeInsets.symmetric(horizontal: 4),
                       child: StatCard(
                         color: card.color,
                         icon: card.icon,

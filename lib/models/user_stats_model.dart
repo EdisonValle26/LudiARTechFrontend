@@ -49,9 +49,21 @@ class UserStatsModel {
   }
 
   int get maxPoints {
+    if (isMaxProgress) {
+      return points;
+    }
+
     final parts = progress.split("/");
     return int.parse(parts[1]);
   }
 
-  double get progressValue => points / maxPoints;
+  double get progressValue {
+    if (isMaxProgress) {
+      return 1.0; // barra llena
+    }
+
+    return points / maxPoints;
+  }
+
+  bool get isMaxProgress => progress.toLowerCase() == "max";
 }

@@ -12,7 +12,6 @@ import 'package:LudiArtech/utils/api_constants.dart';
 import 'package:LudiArtech/widgets/dialogs/app_dialog.dart';
 import 'package:LudiArtech/widgets/dialogs/dialog_button.dart';
 import 'package:LudiArtech/widgets/firebase_image.dart';
-import 'package:LudiArtech/widgets/no_back_button.dart';
 import 'package:flutter/material.dart';
 
 class PowerPointExpertForm extends StatefulWidget {
@@ -331,8 +330,7 @@ class PowerPointExpertFormState extends State<PowerPointExpertForm> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (_) => NoBackWrapper(
-          child: Scaffold(
+        builder: (_) => Scaffold(
             backgroundColor: Colors.black,
             appBar: AppBar(
               backgroundColor: Colors.black,
@@ -350,7 +348,6 @@ class PowerPointExpertFormState extends State<PowerPointExpertForm> {
             ),
           ),
         ),
-      ),
     );
   }
 
